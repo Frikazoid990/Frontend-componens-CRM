@@ -1,7 +1,7 @@
-import { SidebarNav } from "@/components/test-drive-details-for-manager/app-sidebar"
-import { Header } from "@/components/test-drive-details-for-manager/header"
-import { TestDriveDetailsCard } from "@/components/test-drive-details-for-manager/test-drive-details-card"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { SidebarNav } from "@/gpt/test-drive-details-for-manager/app-sidebar"
+import { Header } from "@/gpt/test-drive-details-for-manager/header"
+import { TestDriveDetailsCard } from "@/gpt/test-drive-details-for-manager/test-drive-details-card"
 
 export default function TestDriveDashboardPage() {
   return (

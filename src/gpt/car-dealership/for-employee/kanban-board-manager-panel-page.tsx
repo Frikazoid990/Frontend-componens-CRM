@@ -1,8 +1,8 @@
-import { AppSidebar } from "@/components/kanban-board-components/app-sidebar"
-import { KanbanBoard } from "@/components/kanban-board-components/kanban-board"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { SidebarProvider } from '@/components/ui/sidebar'
+import { AppSidebar } from "@/gpt/kanban-board-components/app-sidebar"
+import { KanbanBoard } from "@/gpt/kanban-board-components/kanban-board"
 import { Plus } from "lucide-react"
 
 export default function ManagerDashboardPage() {

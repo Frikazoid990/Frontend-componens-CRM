@@ -1,7 +1,7 @@
-import { AppSidebar } from "@/components/test-drive-board-details-for-manager/app-sidebar"
-import { TestDriveSection } from "@/components/test-drive-board-details-for-manager/test-drive-section"
 import { Button } from "@/components/ui/button"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/gpt/test-drive-board-details-for-manager/app-sidebar"
+import { TestDriveSection } from "@/gpt/test-drive-board-details-for-manager/test-drive-section"
 import { Plus, User } from "lucide-react"
 
 // Mock data for test drives

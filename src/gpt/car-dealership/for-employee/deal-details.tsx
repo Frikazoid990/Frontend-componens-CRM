@@ -1,11 +1,11 @@
 "use client"
 
-import { ChatSection } from "@/components/deal-details-for-manager/chat-section"
-import { AppSidebar } from "@/components/kanban-board-components/app-sidebar"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { ChatSection } from "@/gpt/deal-details-for-manager/chat-section"
+import { AppSidebar } from "@/gpt/kanban-board-components/app-sidebar"
 import Honda from "@/img-car-page/HondaCivic.jpg"
 import { Edit, User } from "lucide-react"
 import { useState } from "react"

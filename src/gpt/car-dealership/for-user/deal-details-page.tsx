@@ -1,7 +1,7 @@
-import { CarInfoCard } from "@/components/personal-ofice-deal-info-components/car-info-card"
-import { ChatSection } from "@/components/personal-ofice-deal-info-components/chat-section"
-import { DealDetailsCard } from "@/components/personal-ofice-deal-info-components/deal-details-card"
-import { SiteHeader } from "@/components/personal-ofice-deal-info-components/site-header"
+import { CarInfoCard } from "@/gpt/personal-ofice-deal-info-components/car-info-card"
+import { ChatSection } from "@/gpt/personal-ofice-deal-info-components/chat-section"
+import { DealDetailsCard } from "@/gpt/personal-ofice-deal-info-components/deal-details-card"
+import { SiteHeader } from "@/gpt/personal-ofice-deal-info-components/site-header"
 import HondaCivicImage from "@/img-car-page/HondaCivic.jpg"
 
 export default function DealDetailsPage() {
