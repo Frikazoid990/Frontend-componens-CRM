@@ -1,3 +1,4 @@
+import TestDrive from '@/components/pages/manager/TestDrive'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_main/manager/test_drives/$id')({
@@ -5,5 +6,5 @@ export const Route = createFileRoute('/_main/manager/test_drives/$id')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/(main)/manager/test_drives/$id"!</div>
+  return <TestDrive/>
 }

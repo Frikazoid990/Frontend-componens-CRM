@@ -1,11 +1,15 @@
 import { Outlet } from '@tanstack/react-router'
+import MainHeader from '../modules/MainHeader/MainHeader'
 
 const MainLayout = () => {
 	return (
-		<div>
-			<h1>MainLayout</h1>
-			<Outlet/>
+
+		<div className='flex min-h-screen flex-col items-center'>
+			<MainHeader />
+			<main className='min-h-[1000px] w-full flex-grow'>{<Outlet/>}</main>
+	
 		</div>
+
 	)
 }
 

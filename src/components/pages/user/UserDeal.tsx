@@ -1,5 +1,5 @@
 
-const DealPage = () => {
+const UserDeal = () => {
 	return (
 		<div>
 			<h1>Welcome to the Deal Page</h1>
@@ -7,4 +7,4 @@ const DealPage = () => {
 	)
 }
 
-export default DealPage
+export default UserDeal

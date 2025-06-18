@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MainRouteImport } from './routes/_main'
 import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as MainIndexRouteImport } from './routes/_main/index'
 import { Route as MainPersonal_officeIndexRouteImport } from './routes/_main/personal_office/index'
 import { Route as MainPersonal_officeTest_drivesIndexRouteImport } from './routes/_main/personal_office/test_drives/index'
 import { Route as MainPersonal_officeDealIndexRouteImport } from './routes/_main/personal_office/deal/index'
@@ -32,6 +33,11 @@ const MainRoute = MainRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
+} as any)
+const MainIndexRoute = MainIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MainRoute,
 } as any)
 const MainPersonal_officeIndexRoute =
   MainPersonal_officeIndexRouteImport.update({
@@ -108,6 +114,7 @@ const MainManagerDealsIdRoute = MainManagerDealsIdRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof MainIndexRoute
   '/personal_office': typeof MainPersonal_officeIndexRoute
   '/manager/deals/$id': typeof MainManagerDealsIdRoute
   '/manager/test_drives/$id': typeof MainManagerTest_drivesIdRoute
@@ -123,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/personal_office/test_drives': typeof MainPersonal_officeTest_drivesIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof MainIndexRoute
   '/personal_office': typeof MainPersonal_officeIndexRoute
   '/manager/deals/$id': typeof MainManagerDealsIdRoute
   '/manager/test_drives/$id': typeof MainManagerTest_drivesIdRoute
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteWithChildren
   '/_main': typeof MainRouteWithChildren
+  '/_main/': typeof MainIndexRoute
   '/_main/personal_office/': typeof MainPersonal_officeIndexRoute
   '/_main/manager/deals/$id': typeof MainManagerDealsIdRoute
   '/_main/manager/test_drives/$id': typeof MainManagerTest_drivesIdRoute
@@ -158,6 +167,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/personal_office'
     | '/manager/deals/$id'
     | '/manager/test_drives/$id'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/personal_office/test_drives'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/personal_office'
     | '/manager/deals/$id'
     | '/manager/test_drives/$id'
@@ -190,6 +201,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_auth'
     | '/_main'
+    | '/_main/'
     | '/_main/personal_office/'
     | '/_main/manager/deals/$id'
     | '/_main/manager/test_drives/$id'
@@ -225,6 +237,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_main/': {
+      id: '/_main/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof MainIndexRouteImport
+      parentRoute: typeof MainRoute
     }
     '/_main/personal_office/': {
       id: '/_main/personal_office/'
@@ -335,6 +354,7 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface MainRouteChildren {
+  MainIndexRoute: typeof MainIndexRoute
   MainPersonal_officeIndexRoute: typeof MainPersonal_officeIndexRoute
   MainManagerDealsIdRoute: typeof MainManagerDealsIdRoute
   MainManagerTest_drivesIdRoute: typeof MainManagerTest_drivesIdRoute
@@ -348,6 +368,7 @@ interface MainRouteChildren {
 }
 
 const MainRouteChildren: MainRouteChildren = {
+  MainIndexRoute: MainIndexRoute,
   MainPersonal_officeIndexRoute: MainPersonal_officeIndexRoute,
   MainManagerDealsIdRoute: MainManagerDealsIdRoute,
   MainManagerTest_drivesIdRoute: MainManagerTest_drivesIdRoute,

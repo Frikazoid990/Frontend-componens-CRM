@@ -1,5 +1,5 @@
 "use client"
-import { CarCard } from "@/components/car-card"
+import { CarCard } from "@/components/items/CarCard"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,

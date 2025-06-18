@@ -1,10 +1,8 @@
-import ManagementDashboard from '@/components/pages/ManagementDashboard'
+import ManagementDashboard from '@/components/pages/manager/ManagementDashboard'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_main/manager/dashboard/')({
-  component: RouteComponent,
+  component: ManagementDashboard,
 })
 
-function RouteComponent() {
-  return <ManagementDashboard/>
-}
+

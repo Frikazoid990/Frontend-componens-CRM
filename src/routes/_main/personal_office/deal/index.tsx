@@ -1,3 +1,4 @@
+import UserDeal from '@/components/pages/user/UserDeal'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_main/personal_office/deal/')({
@@ -5,5 +6,5 @@ export const Route = createFileRoute('/_main/personal_office/deal/')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/(main)/personal_office/deal/"!</div>
+  return <UserDeal/>
 }

@@ -1,5 +1,5 @@
 
-import ManagementTestDrives from '@/components/pages/ManagmentTestDrives'
+import ManagementTestDrives from '@/components/pages/manager/ManagmentTestDrives'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_main/manager/test_drives/')({

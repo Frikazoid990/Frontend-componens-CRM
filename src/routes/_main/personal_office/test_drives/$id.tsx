@@ -1,4 +1,4 @@
-import TestDrivePage from '@/components/pages/TestDrive'
+import TestDrivePage from '@/components/pages/user/TestDrive'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_main/personal_office/test_drives/$id')(

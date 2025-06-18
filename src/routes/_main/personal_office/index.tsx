@@ -1,4 +1,4 @@
-import PersonalOffice from '@/components/pages/PersonalOffice'
+import PersonalOffice from '@/components/pages/user/PersonalOffice'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_main/personal_office/')({

@@ -1,4 +1,4 @@
-import TestDrivesList from '@/components/pages/TestDrivesList'
+import TestDrivesList from '@/components/pages/user/TestDrivesList'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_main/personal_office/test_drives/')({

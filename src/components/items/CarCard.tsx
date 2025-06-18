@@ -8,26 +8,15 @@ import { Calendar } from "@/components/ui/calendar"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import type { CarType } from '@/types/car.type'
 import { CalendarDays, Clock } from "lucide-react"
 
 interface CarCardProps {
-  brand: string
-  model: string
-  description: string
-  imageSrc: string
-  colors: { name: string; hex: string }[]
-  engineOptions: string[]
-  configurationOptions: string[]
+  car: CarType
 }
 
 export function CarCard({
-  brand,
-  model,
-  description,
-  imageSrc,
-  colors,
-  engineOptions,
-  configurationOptions,
+car
 }: CarCardProps) {
   const [selectedColor, setSelectedColor] = useState(colors[0]?.name || "")
   const [selectedEngine, setSelectedEngine] = useState(engineOptions[0] || "")
