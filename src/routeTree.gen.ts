@@ -8,174 +8,156 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as Personal_officeIndexRouteImport } from './routes/personal_office/index'
-import { Route as ManagerLayoutRouteImport } from './routes/manager/_layout'
-import { Route as AuthLayoutRouteImport } from './routes/auth/_layout'
-import { Route as Personal_officeTest_drivesIndexRouteImport } from './routes/personal_office/test_drives/index'
-import { Route as Personal_officeDealIndexRouteImport } from './routes/personal_office/deal/index'
-import { Route as ManagerTest_drivesIndexRouteImport } from './routes/manager/test_drives/index'
-import { Route as ManagerReportingIndexRouteImport } from './routes/manager/reporting/index'
-import { Route as ManagerDealsIndexRouteImport } from './routes/manager/deals/index'
-import { Route as ManagerDashboardIndexRouteImport } from './routes/manager/dashboard/index'
-import { Route as AuthRegisterIndexRouteImport } from './routes/auth/register/index'
-import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
-import { Route as AuthErrorIndexRouteImport } from './routes/auth/error/index'
-import { Route as Personal_officeTest_drivesIdRouteImport } from './routes/personal_office/test_drives/$id'
-import { Route as ManagerTest_drivesIdRouteImport } from './routes/manager/test_drives/$id'
-import { Route as ManagerDealsIdRouteImport } from './routes/manager/deals/$id'
+import { Route as MainRouteImport } from './routes/_main'
+import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as MainPersonal_officeIndexRouteImport } from './routes/_main/personal_office/index'
+import { Route as MainPersonal_officeTest_drivesIndexRouteImport } from './routes/_main/personal_office/test_drives/index'
+import { Route as MainPersonal_officeDealIndexRouteImport } from './routes/_main/personal_office/deal/index'
+import { Route as MainManagerTest_drivesIndexRouteImport } from './routes/_main/manager/test_drives/index'
+import { Route as MainManagerReportingIndexRouteImport } from './routes/_main/manager/reporting/index'
+import { Route as MainManagerDealsIndexRouteImport } from './routes/_main/manager/deals/index'
+import { Route as MainManagerDashboardIndexRouteImport } from './routes/_main/manager/dashboard/index'
+import { Route as AuthAuthRegisterIndexRouteImport } from './routes/_auth/auth/register/index'
+import { Route as AuthAuthLoginIndexRouteImport } from './routes/_auth/auth/login/index'
+import { Route as AuthAuthErrorIndexRouteImport } from './routes/_auth/auth/error/index'
+import { Route as MainPersonal_officeTest_drivesIdRouteImport } from './routes/_main/personal_office/test_drives/$id'
+import { Route as MainManagerTest_drivesIdRouteImport } from './routes/_main/manager/test_drives/$id'
+import { Route as MainManagerDealsIdRouteImport } from './routes/_main/manager/deals/$id'
 
-const ManagerRouteImport = createFileRoute('/manager')()
-const AuthRouteImport = createFileRoute('/auth')()
-
-const ManagerRoute = ManagerRouteImport.update({
-  id: '/manager',
-  path: '/manager',
+const MainRoute = MainRouteImport.update({
+  id: '/_main',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const Personal_officeIndexRoute = Personal_officeIndexRouteImport.update({
-  id: '/personal_office/',
-  path: '/personal_office/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ManagerLayoutRoute = ManagerLayoutRouteImport.update({
-  id: '/_layout',
-  getParentRoute: () => ManagerRoute,
-} as any)
-const AuthLayoutRoute = AuthLayoutRouteImport.update({
-  id: '/_layout',
-  getParentRoute: () => AuthRoute,
-} as any)
-const Personal_officeTest_drivesIndexRoute =
-  Personal_officeTest_drivesIndexRouteImport.update({
+const MainPersonal_officeIndexRoute =
+  MainPersonal_officeIndexRouteImport.update({
+    id: '/personal_office/',
+    path: '/personal_office/',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainPersonal_officeTest_drivesIndexRoute =
+  MainPersonal_officeTest_drivesIndexRouteImport.update({
     id: '/personal_office/test_drives/',
     path: '/personal_office/test_drives/',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => MainRoute,
   } as any)
-const Personal_officeDealIndexRoute =
-  Personal_officeDealIndexRouteImport.update({
+const MainPersonal_officeDealIndexRoute =
+  MainPersonal_officeDealIndexRouteImport.update({
     id: '/personal_office/deal/',
     path: '/personal_office/deal/',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => MainRoute,
   } as any)
-const ManagerTest_drivesIndexRoute = ManagerTest_drivesIndexRouteImport.update({
-  id: '/test_drives/',
-  path: '/test_drives/',
-  getParentRoute: () => ManagerRoute,
+const MainManagerTest_drivesIndexRoute =
+  MainManagerTest_drivesIndexRouteImport.update({
+    id: '/manager/test_drives/',
+    path: '/manager/test_drives/',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainManagerReportingIndexRoute =
+  MainManagerReportingIndexRouteImport.update({
+    id: '/manager/reporting/',
+    path: '/manager/reporting/',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainManagerDealsIndexRoute = MainManagerDealsIndexRouteImport.update({
+  id: '/manager/deals/',
+  path: '/manager/deals/',
+  getParentRoute: () => MainRoute,
 } as any)
-const ManagerReportingIndexRoute = ManagerReportingIndexRouteImport.update({
-  id: '/reporting/',
-  path: '/reporting/',
-  getParentRoute: () => ManagerRoute,
-} as any)
-const ManagerDealsIndexRoute = ManagerDealsIndexRouteImport.update({
-  id: '/deals/',
-  path: '/deals/',
-  getParentRoute: () => ManagerRoute,
-} as any)
-const ManagerDashboardIndexRoute = ManagerDashboardIndexRouteImport.update({
-  id: '/dashboard/',
-  path: '/dashboard/',
-  getParentRoute: () => ManagerRoute,
-} as any)
-const AuthRegisterIndexRoute = AuthRegisterIndexRouteImport.update({
-  id: '/register/',
-  path: '/register/',
+const MainManagerDashboardIndexRoute =
+  MainManagerDashboardIndexRouteImport.update({
+    id: '/manager/dashboard/',
+    path: '/manager/dashboard/',
+    getParentRoute: () => MainRoute,
+  } as any)
+const AuthAuthRegisterIndexRoute = AuthAuthRegisterIndexRouteImport.update({
+  id: '/auth/register/',
+  path: '/auth/register/',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
-  id: '/login/',
-  path: '/login/',
+const AuthAuthLoginIndexRoute = AuthAuthLoginIndexRouteImport.update({
+  id: '/auth/login/',
+  path: '/auth/login/',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthErrorIndexRoute = AuthErrorIndexRouteImport.update({
-  id: '/error/',
-  path: '/error/',
+const AuthAuthErrorIndexRoute = AuthAuthErrorIndexRouteImport.update({
+  id: '/auth/error/',
+  path: '/auth/error/',
   getParentRoute: () => AuthRoute,
 } as any)
-const Personal_officeTest_drivesIdRoute =
-  Personal_officeTest_drivesIdRouteImport.update({
+const MainPersonal_officeTest_drivesIdRoute =
+  MainPersonal_officeTest_drivesIdRouteImport.update({
     id: '/personal_office/test_drives/$id',
     path: '/personal_office/test_drives/$id',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => MainRoute,
   } as any)
-const ManagerTest_drivesIdRoute = ManagerTest_drivesIdRouteImport.update({
-  id: '/test_drives/$id',
-  path: '/test_drives/$id',
-  getParentRoute: () => ManagerRoute,
-} as any)
-const ManagerDealsIdRoute = ManagerDealsIdRouteImport.update({
-  id: '/deals/$id',
-  path: '/deals/$id',
-  getParentRoute: () => ManagerRoute,
+const MainManagerTest_drivesIdRoute =
+  MainManagerTest_drivesIdRouteImport.update({
+    id: '/manager/test_drives/$id',
+    path: '/manager/test_drives/$id',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainManagerDealsIdRoute = MainManagerDealsIdRouteImport.update({
+  id: '/manager/deals/$id',
+  path: '/manager/deals/$id',
+  getParentRoute: () => MainRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/auth': typeof AuthLayoutRoute
-  '/manager': typeof ManagerLayoutRoute
-  '/personal_office': typeof Personal_officeIndexRoute
-  '/manager/deals/$id': typeof ManagerDealsIdRoute
-  '/manager/test_drives/$id': typeof ManagerTest_drivesIdRoute
-  '/personal_office/test_drives/$id': typeof Personal_officeTest_drivesIdRoute
-  '/auth/error': typeof AuthErrorIndexRoute
-  '/auth/login': typeof AuthLoginIndexRoute
-  '/auth/register': typeof AuthRegisterIndexRoute
-  '/manager/dashboard': typeof ManagerDashboardIndexRoute
-  '/manager/deals': typeof ManagerDealsIndexRoute
-  '/manager/reporting': typeof ManagerReportingIndexRoute
-  '/manager/test_drives': typeof ManagerTest_drivesIndexRoute
-  '/personal_office/deal': typeof Personal_officeDealIndexRoute
-  '/personal_office/test_drives': typeof Personal_officeTest_drivesIndexRoute
+  '/personal_office': typeof MainPersonal_officeIndexRoute
+  '/manager/deals/$id': typeof MainManagerDealsIdRoute
+  '/manager/test_drives/$id': typeof MainManagerTest_drivesIdRoute
+  '/personal_office/test_drives/$id': typeof MainPersonal_officeTest_drivesIdRoute
+  '/auth/error': typeof AuthAuthErrorIndexRoute
+  '/auth/login': typeof AuthAuthLoginIndexRoute
+  '/auth/register': typeof AuthAuthRegisterIndexRoute
+  '/manager/dashboard': typeof MainManagerDashboardIndexRoute
+  '/manager/deals': typeof MainManagerDealsIndexRoute
+  '/manager/reporting': typeof MainManagerReportingIndexRoute
+  '/manager/test_drives': typeof MainManagerTest_drivesIndexRoute
+  '/personal_office/deal': typeof MainPersonal_officeDealIndexRoute
+  '/personal_office/test_drives': typeof MainPersonal_officeTest_drivesIndexRoute
 }
 export interface FileRoutesByTo {
-  '/auth': typeof AuthLayoutRoute
-  '/manager': typeof ManagerLayoutRoute
-  '/personal_office': typeof Personal_officeIndexRoute
-  '/manager/deals/$id': typeof ManagerDealsIdRoute
-  '/manager/test_drives/$id': typeof ManagerTest_drivesIdRoute
-  '/personal_office/test_drives/$id': typeof Personal_officeTest_drivesIdRoute
-  '/auth/error': typeof AuthErrorIndexRoute
-  '/auth/login': typeof AuthLoginIndexRoute
-  '/auth/register': typeof AuthRegisterIndexRoute
-  '/manager/dashboard': typeof ManagerDashboardIndexRoute
-  '/manager/deals': typeof ManagerDealsIndexRoute
-  '/manager/reporting': typeof ManagerReportingIndexRoute
-  '/manager/test_drives': typeof ManagerTest_drivesIndexRoute
-  '/personal_office/deal': typeof Personal_officeDealIndexRoute
-  '/personal_office/test_drives': typeof Personal_officeTest_drivesIndexRoute
+  '/personal_office': typeof MainPersonal_officeIndexRoute
+  '/manager/deals/$id': typeof MainManagerDealsIdRoute
+  '/manager/test_drives/$id': typeof MainManagerTest_drivesIdRoute
+  '/personal_office/test_drives/$id': typeof MainPersonal_officeTest_drivesIdRoute
+  '/auth/error': typeof AuthAuthErrorIndexRoute
+  '/auth/login': typeof AuthAuthLoginIndexRoute
+  '/auth/register': typeof AuthAuthRegisterIndexRoute
+  '/manager/dashboard': typeof MainManagerDashboardIndexRoute
+  '/manager/deals': typeof MainManagerDealsIndexRoute
+  '/manager/reporting': typeof MainManagerReportingIndexRoute
+  '/manager/test_drives': typeof MainManagerTest_drivesIndexRoute
+  '/personal_office/deal': typeof MainPersonal_officeDealIndexRoute
+  '/personal_office/test_drives': typeof MainPersonal_officeTest_drivesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/auth': typeof AuthRouteWithChildren
-  '/auth/_layout': typeof AuthLayoutRoute
-  '/manager': typeof ManagerRouteWithChildren
-  '/manager/_layout': typeof ManagerLayoutRoute
-  '/personal_office/': typeof Personal_officeIndexRoute
-  '/manager/deals/$id': typeof ManagerDealsIdRoute
-  '/manager/test_drives/$id': typeof ManagerTest_drivesIdRoute
-  '/personal_office/test_drives/$id': typeof Personal_officeTest_drivesIdRoute
-  '/auth/error/': typeof AuthErrorIndexRoute
-  '/auth/login/': typeof AuthLoginIndexRoute
-  '/auth/register/': typeof AuthRegisterIndexRoute
-  '/manager/dashboard/': typeof ManagerDashboardIndexRoute
-  '/manager/deals/': typeof ManagerDealsIndexRoute
-  '/manager/reporting/': typeof ManagerReportingIndexRoute
-  '/manager/test_drives/': typeof ManagerTest_drivesIndexRoute
-  '/personal_office/deal/': typeof Personal_officeDealIndexRoute
-  '/personal_office/test_drives/': typeof Personal_officeTest_drivesIndexRoute
+  '/_auth': typeof AuthRouteWithChildren
+  '/_main': typeof MainRouteWithChildren
+  '/_main/personal_office/': typeof MainPersonal_officeIndexRoute
+  '/_main/manager/deals/$id': typeof MainManagerDealsIdRoute
+  '/_main/manager/test_drives/$id': typeof MainManagerTest_drivesIdRoute
+  '/_main/personal_office/test_drives/$id': typeof MainPersonal_officeTest_drivesIdRoute
+  '/_auth/auth/error/': typeof AuthAuthErrorIndexRoute
+  '/_auth/auth/login/': typeof AuthAuthLoginIndexRoute
+  '/_auth/auth/register/': typeof AuthAuthRegisterIndexRoute
+  '/_main/manager/dashboard/': typeof MainManagerDashboardIndexRoute
+  '/_main/manager/deals/': typeof MainManagerDealsIndexRoute
+  '/_main/manager/reporting/': typeof MainManagerReportingIndexRoute
+  '/_main/manager/test_drives/': typeof MainManagerTest_drivesIndexRoute
+  '/_main/personal_office/deal/': typeof MainPersonal_officeDealIndexRoute
+  '/_main/personal_office/test_drives/': typeof MainPersonal_officeTest_drivesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/auth'
-    | '/manager'
     | '/personal_office'
     | '/manager/deals/$id'
     | '/manager/test_drives/$id'
@@ -191,8 +173,6 @@ export interface FileRouteTypes {
     | '/personal_office/test_drives'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/auth'
-    | '/manager'
     | '/personal_office'
     | '/manager/deals/$id'
     | '/manager/test_drives/$id'
@@ -208,204 +188,184 @@ export interface FileRouteTypes {
     | '/personal_office/test_drives'
   id:
     | '__root__'
-    | '/auth'
-    | '/auth/_layout'
-    | '/manager'
-    | '/manager/_layout'
-    | '/personal_office/'
-    | '/manager/deals/$id'
-    | '/manager/test_drives/$id'
-    | '/personal_office/test_drives/$id'
-    | '/auth/error/'
-    | '/auth/login/'
-    | '/auth/register/'
-    | '/manager/dashboard/'
-    | '/manager/deals/'
-    | '/manager/reporting/'
-    | '/manager/test_drives/'
-    | '/personal_office/deal/'
-    | '/personal_office/test_drives/'
+    | '/_auth'
+    | '/_main'
+    | '/_main/personal_office/'
+    | '/_main/manager/deals/$id'
+    | '/_main/manager/test_drives/$id'
+    | '/_main/personal_office/test_drives/$id'
+    | '/_auth/auth/error/'
+    | '/_auth/auth/login/'
+    | '/_auth/auth/register/'
+    | '/_main/manager/dashboard/'
+    | '/_main/manager/deals/'
+    | '/_main/manager/reporting/'
+    | '/_main/manager/test_drives/'
+    | '/_main/personal_office/deal/'
+    | '/_main/personal_office/test_drives/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
-  ManagerRoute: typeof ManagerRouteWithChildren
-  Personal_officeIndexRoute: typeof Personal_officeIndexRoute
-  Personal_officeTest_drivesIdRoute: typeof Personal_officeTest_drivesIdRoute
-  Personal_officeDealIndexRoute: typeof Personal_officeDealIndexRoute
-  Personal_officeTest_drivesIndexRoute: typeof Personal_officeTest_drivesIndexRoute
+  MainRoute: typeof MainRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/manager': {
-      id: '/manager'
-      path: '/manager'
-      fullPath: '/manager'
-      preLoaderRoute: typeof ManagerRouteImport
+    '/_main': {
+      id: '/_main'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof MainRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/personal_office/': {
-      id: '/personal_office/'
+    '/_main/personal_office/': {
+      id: '/_main/personal_office/'
       path: '/personal_office'
       fullPath: '/personal_office'
-      preLoaderRoute: typeof Personal_officeIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof MainPersonal_officeIndexRouteImport
+      parentRoute: typeof MainRoute
     }
-    '/manager/_layout': {
-      id: '/manager/_layout'
-      path: '/manager'
-      fullPath: '/manager'
-      preLoaderRoute: typeof ManagerLayoutRouteImport
-      parentRoute: typeof ManagerRoute
-    }
-    '/auth/_layout': {
-      id: '/auth/_layout'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthLayoutRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/personal_office/test_drives/': {
-      id: '/personal_office/test_drives/'
+    '/_main/personal_office/test_drives/': {
+      id: '/_main/personal_office/test_drives/'
       path: '/personal_office/test_drives'
       fullPath: '/personal_office/test_drives'
-      preLoaderRoute: typeof Personal_officeTest_drivesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof MainPersonal_officeTest_drivesIndexRouteImport
+      parentRoute: typeof MainRoute
     }
-    '/personal_office/deal/': {
-      id: '/personal_office/deal/'
+    '/_main/personal_office/deal/': {
+      id: '/_main/personal_office/deal/'
       path: '/personal_office/deal'
       fullPath: '/personal_office/deal'
-      preLoaderRoute: typeof Personal_officeDealIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof MainPersonal_officeDealIndexRouteImport
+      parentRoute: typeof MainRoute
     }
-    '/manager/test_drives/': {
-      id: '/manager/test_drives/'
-      path: '/test_drives'
+    '/_main/manager/test_drives/': {
+      id: '/_main/manager/test_drives/'
+      path: '/manager/test_drives'
       fullPath: '/manager/test_drives'
-      preLoaderRoute: typeof ManagerTest_drivesIndexRouteImport
-      parentRoute: typeof ManagerRoute
+      preLoaderRoute: typeof MainManagerTest_drivesIndexRouteImport
+      parentRoute: typeof MainRoute
     }
-    '/manager/reporting/': {
-      id: '/manager/reporting/'
-      path: '/reporting'
+    '/_main/manager/reporting/': {
+      id: '/_main/manager/reporting/'
+      path: '/manager/reporting'
       fullPath: '/manager/reporting'
-      preLoaderRoute: typeof ManagerReportingIndexRouteImport
-      parentRoute: typeof ManagerRoute
+      preLoaderRoute: typeof MainManagerReportingIndexRouteImport
+      parentRoute: typeof MainRoute
     }
-    '/manager/deals/': {
-      id: '/manager/deals/'
-      path: '/deals'
+    '/_main/manager/deals/': {
+      id: '/_main/manager/deals/'
+      path: '/manager/deals'
       fullPath: '/manager/deals'
-      preLoaderRoute: typeof ManagerDealsIndexRouteImport
-      parentRoute: typeof ManagerRoute
+      preLoaderRoute: typeof MainManagerDealsIndexRouteImport
+      parentRoute: typeof MainRoute
     }
-    '/manager/dashboard/': {
-      id: '/manager/dashboard/'
-      path: '/dashboard'
+    '/_main/manager/dashboard/': {
+      id: '/_main/manager/dashboard/'
+      path: '/manager/dashboard'
       fullPath: '/manager/dashboard'
-      preLoaderRoute: typeof ManagerDashboardIndexRouteImport
-      parentRoute: typeof ManagerRoute
+      preLoaderRoute: typeof MainManagerDashboardIndexRouteImport
+      parentRoute: typeof MainRoute
     }
-    '/auth/register/': {
-      id: '/auth/register/'
-      path: '/register'
+    '/_auth/auth/register/': {
+      id: '/_auth/auth/register/'
+      path: '/auth/register'
       fullPath: '/auth/register'
-      preLoaderRoute: typeof AuthRegisterIndexRouteImport
+      preLoaderRoute: typeof AuthAuthRegisterIndexRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/auth/login/': {
-      id: '/auth/login/'
-      path: '/login'
+    '/_auth/auth/login/': {
+      id: '/_auth/auth/login/'
+      path: '/auth/login'
       fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginIndexRouteImport
+      preLoaderRoute: typeof AuthAuthLoginIndexRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/auth/error/': {
-      id: '/auth/error/'
-      path: '/error'
+    '/_auth/auth/error/': {
+      id: '/_auth/auth/error/'
+      path: '/auth/error'
       fullPath: '/auth/error'
-      preLoaderRoute: typeof AuthErrorIndexRouteImport
+      preLoaderRoute: typeof AuthAuthErrorIndexRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/personal_office/test_drives/$id': {
-      id: '/personal_office/test_drives/$id'
+    '/_main/personal_office/test_drives/$id': {
+      id: '/_main/personal_office/test_drives/$id'
       path: '/personal_office/test_drives/$id'
       fullPath: '/personal_office/test_drives/$id'
-      preLoaderRoute: typeof Personal_officeTest_drivesIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof MainPersonal_officeTest_drivesIdRouteImport
+      parentRoute: typeof MainRoute
     }
-    '/manager/test_drives/$id': {
-      id: '/manager/test_drives/$id'
-      path: '/test_drives/$id'
+    '/_main/manager/test_drives/$id': {
+      id: '/_main/manager/test_drives/$id'
+      path: '/manager/test_drives/$id'
       fullPath: '/manager/test_drives/$id'
-      preLoaderRoute: typeof ManagerTest_drivesIdRouteImport
-      parentRoute: typeof ManagerRoute
+      preLoaderRoute: typeof MainManagerTest_drivesIdRouteImport
+      parentRoute: typeof MainRoute
     }
-    '/manager/deals/$id': {
-      id: '/manager/deals/$id'
-      path: '/deals/$id'
+    '/_main/manager/deals/$id': {
+      id: '/_main/manager/deals/$id'
+      path: '/manager/deals/$id'
       fullPath: '/manager/deals/$id'
-      preLoaderRoute: typeof ManagerDealsIdRouteImport
-      parentRoute: typeof ManagerRoute
+      preLoaderRoute: typeof MainManagerDealsIdRouteImport
+      parentRoute: typeof MainRoute
     }
   }
 }
 
 interface AuthRouteChildren {
-  AuthLayoutRoute: typeof AuthLayoutRoute
-  AuthErrorIndexRoute: typeof AuthErrorIndexRoute
-  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
-  AuthRegisterIndexRoute: typeof AuthRegisterIndexRoute
+  AuthAuthErrorIndexRoute: typeof AuthAuthErrorIndexRoute
+  AuthAuthLoginIndexRoute: typeof AuthAuthLoginIndexRoute
+  AuthAuthRegisterIndexRoute: typeof AuthAuthRegisterIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthLayoutRoute: AuthLayoutRoute,
-  AuthErrorIndexRoute: AuthErrorIndexRoute,
-  AuthLoginIndexRoute: AuthLoginIndexRoute,
-  AuthRegisterIndexRoute: AuthRegisterIndexRoute,
+  AuthAuthErrorIndexRoute: AuthAuthErrorIndexRoute,
+  AuthAuthLoginIndexRoute: AuthAuthLoginIndexRoute,
+  AuthAuthRegisterIndexRoute: AuthAuthRegisterIndexRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
-interface ManagerRouteChildren {
-  ManagerLayoutRoute: typeof ManagerLayoutRoute
-  ManagerDealsIdRoute: typeof ManagerDealsIdRoute
-  ManagerTest_drivesIdRoute: typeof ManagerTest_drivesIdRoute
-  ManagerDashboardIndexRoute: typeof ManagerDashboardIndexRoute
-  ManagerDealsIndexRoute: typeof ManagerDealsIndexRoute
-  ManagerReportingIndexRoute: typeof ManagerReportingIndexRoute
-  ManagerTest_drivesIndexRoute: typeof ManagerTest_drivesIndexRoute
+interface MainRouteChildren {
+  MainPersonal_officeIndexRoute: typeof MainPersonal_officeIndexRoute
+  MainManagerDealsIdRoute: typeof MainManagerDealsIdRoute
+  MainManagerTest_drivesIdRoute: typeof MainManagerTest_drivesIdRoute
+  MainPersonal_officeTest_drivesIdRoute: typeof MainPersonal_officeTest_drivesIdRoute
+  MainManagerDashboardIndexRoute: typeof MainManagerDashboardIndexRoute
+  MainManagerDealsIndexRoute: typeof MainManagerDealsIndexRoute
+  MainManagerReportingIndexRoute: typeof MainManagerReportingIndexRoute
+  MainManagerTest_drivesIndexRoute: typeof MainManagerTest_drivesIndexRoute
+  MainPersonal_officeDealIndexRoute: typeof MainPersonal_officeDealIndexRoute
+  MainPersonal_officeTest_drivesIndexRoute: typeof MainPersonal_officeTest_drivesIndexRoute
 }
 
-const ManagerRouteChildren: ManagerRouteChildren = {
-  ManagerLayoutRoute: ManagerLayoutRoute,
-  ManagerDealsIdRoute: ManagerDealsIdRoute,
-  ManagerTest_drivesIdRoute: ManagerTest_drivesIdRoute,
-  ManagerDashboardIndexRoute: ManagerDashboardIndexRoute,
-  ManagerDealsIndexRoute: ManagerDealsIndexRoute,
-  ManagerReportingIndexRoute: ManagerReportingIndexRoute,
-  ManagerTest_drivesIndexRoute: ManagerTest_drivesIndexRoute,
+const MainRouteChildren: MainRouteChildren = {
+  MainPersonal_officeIndexRoute: MainPersonal_officeIndexRoute,
+  MainManagerDealsIdRoute: MainManagerDealsIdRoute,
+  MainManagerTest_drivesIdRoute: MainManagerTest_drivesIdRoute,
+  MainPersonal_officeTest_drivesIdRoute: MainPersonal_officeTest_drivesIdRoute,
+  MainManagerDashboardIndexRoute: MainManagerDashboardIndexRoute,
+  MainManagerDealsIndexRoute: MainManagerDealsIndexRoute,
+  MainManagerReportingIndexRoute: MainManagerReportingIndexRoute,
+  MainManagerTest_drivesIndexRoute: MainManagerTest_drivesIndexRoute,
+  MainPersonal_officeDealIndexRoute: MainPersonal_officeDealIndexRoute,
+  MainPersonal_officeTest_drivesIndexRoute:
+    MainPersonal_officeTest_drivesIndexRoute,
 }
 
-const ManagerRouteWithChildren =
-  ManagerRoute._addFileChildren(ManagerRouteChildren)
+const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
-  ManagerRoute: ManagerRouteWithChildren,
-  Personal_officeIndexRoute: Personal_officeIndexRoute,
-  Personal_officeTest_drivesIdRoute: Personal_officeTest_drivesIdRoute,
-  Personal_officeDealIndexRoute: Personal_officeDealIndexRoute,
-  Personal_officeTest_drivesIndexRoute: Personal_officeTest_drivesIndexRoute,
+  MainRoute: MainRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
