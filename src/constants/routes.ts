@@ -17,4 +17,41 @@
 
 		updateDealWithStatus: (dealId: string) => `/deal/update-deal-with-status/${dealId}`,
 
+		updateDealWithIsCanceled: (dealId : string) => `/dea/update-deal-with-is-canceled/${dealId}`,
+
+		getDeals: '/deal/get-all-deals',
 	}
+
+	export const testDriveApiRoutes = {
+		getTestDrives: '/test-drive/get-test-drives',
+
+		updateTestDriveWithEmployee: (testDriveId: string) => `/test-drive/test-drive-update-employee/${testDriveId}`,
+		
+		updateTestDriveWithStatus: (testDriveId: string) => `/test-drive/test-drive-update-status/${testDriveId}`,
+
+		availableDays: `/test-drive/available-days`,
+
+		availableSlots: `/test-drive/available-slots`,
+
+		addTestDrive: `/test-drive/add-test-drive`,
+		
+	}
+
+	export const statusApiRoutes = {
+		getStatusTestDrives: `/statuses/get-statuses-test-drive`,
+
+		getStatusDeals: `/statuses/get-statuses-deals`,
+	}
+
+	export const messageApiRoutes = {
+		addMessage: `/message/add-message`,
+
+		getMessages: (chatId: number) => `/message/get-message-for-chat/${chatId}` 
+	}
+
+	export const managerApiRoutes = {
+		getStaff: `/manager/get-staff`
+	}
+
+	
+
