@@ -6,7 +6,7 @@ import type { Employee } from '../Common types/employee.type'
 export interface TestDriveType {
 	id: UUID;
 	plannedDate: string;
-	Status: string;
+	status: string;
 	car: Car;
 	client: Client;
 	employee?: Employee
