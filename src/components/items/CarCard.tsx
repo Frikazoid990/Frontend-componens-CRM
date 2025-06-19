@@ -1,129 +1,238 @@
-"use client"
+'use client';
 
-import { ru } from "date-fns/locale"
-import { useState } from "react"
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { CarType } from '@/types/car.type'
-import { CalendarDays, Clock } from "lucide-react"
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { dealApiRoutes } from '@/constants/routes';
+import { useSession } from '@/hooks/useSession';
+import type { CarType } from '@/types/car.type';
+import type { DealTypeOut } from '@/types/deal/dealOut.type';
+import { ImageIcon } from 'lucide-react';
+import { Card, CardContent } from '../ui/card';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
 
 interface CarCardProps {
-  car: CarType
+  car: CarType;
 }
 
-export function CarCard({
-car
-}: CarCardProps) {
-  const [selectedColor, setSelectedColor] = useState(colors[0]?.name || "")
-  const [selectedEngine, setSelectedEngine] = useState(engineOptions[0] || "")
-  const [selectedConfiguration, setSelectedConfiguration] = useState(configurationOptions[0] || "")
+export function CarCard({ car }: CarCardProps) {
+  const [initialConfigName, initialConfig] = Object.entries(car.configurationOptions)[0];
 
-  const [showCalendar, setShowCalendar] = useState(false)
-  const [showTimeSlots, setShowTimeSlots] = useState(false)
-  const [showConfirmation, setShowConfirmation] = useState(false)
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
-  const [selectedTime, setSelectedTime] = useState("")
+  const user = useSession();
 
-  const generateTimeSlots = () => {
-    const slots = []
-    for (let hour = 9; hour <= 17; hour++) {
-      slots.push(`${hour.toString().padStart(2, "0")}:00`)
-      if (hour < 17) {
-        slots.push(`${hour.toString().padStart(2, "0")}:30`)
-      }
-    }
-    return slots
-  }
+  const [selectedConfig, setSelectedConfig] = useState<string>(initialConfigName);
+  const [selectedEngine, setSelectedEngine] = useState<string>(initialConfig.Engine[0]);
+  const [selectedColor, setSelectedColor] = useState<string>(initialConfig.Color[0]);
 
-  const timeSlots = generateTimeSlots()
+  const [isShownBuyConfirmation, setIsShownBuyConfirmation] = useState<boolean>(false);
 
-  // Format date in Russian format
-  const formatDateInRussian = (date: Date) => {
-    return date.toLocaleDateString("ru-RU", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+  const currentConfig = car.configurationOptions[selectedConfig];
+  const availableConfigurations = Object.keys(car.configurationOptions).map(key => ({
+    value: key,
+    name: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize first letter
+  }));
+
+  const handleConfigChange = (value: string) => {
+    setSelectedConfig(value);
+    setSelectedEngine(''); // Reset engine selection
+    setSelectedColor(''); // Reset color selection
+  };
+
+  const confirmationHandler = () => {
+    setIsShownBuyConfirmation(true);
+  };
+
+  const buyHandler = () => {
+    if (!user) return;
+
+    setIsShownBuyConfirmation(false);
+
+    const request: DealTypeOut = {
+      clientId: user.id, // Replace with actual client ID
+      carId: car.id, // Assuming car has an id property
+      selectedConfiguration: selectedConfig,
+      selectedOptions: {
+        Engine: selectedEngine,
+        Price: currentConfig.Price,
+        Color: selectedColor,
+      },
+    };
+
+    const requestBody = JSON.stringify(request);
+
+    fetch(import.meta.env.VITE_HOST + dealApiRoutes.addDeal, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: requestBody,
     })
-  }
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Deal created successfully:', data);
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  };
+
+  const testDriveHandler = () => {};
 
   return (
-    <div className="border rounded-lg p-4 grid gap-4 md:grid-cols-[200px_1fr_200px] lg:grid-cols-[250px_1fr_250px] items-start">
-      <div className="flex justify-center items-center h-48 w-full bg-gray-100 rounded-md overflow-hidden md:h-auto">
-        <img
-          src={imageSrc || "/placeholder.svg"}
-          alt={`${brand} ${model}`}
-          width={200}
-          height={150}
-          className="object-cover w-full h-full"
-        />
-      </div>
-      <div className="grid gap-2 md:pl-4">
-        <h2 className="text-2xl font-bold">{brand}</h2>
-        <h3 className="text-lg text-gray-600">{model}</h3>
-        <p className="text-sm text-gray-700">{description}</p>
-        <div className="flex gap-2 mt-4">
-          <Button variant="default">Купить</Button>
-          <Button variant="outline" onClick={() => setShowCalendar(true)}>
-            <CalendarDays className="w-4 h-4 mr-2" />
-            Тест-драйв
-          </Button>
-        </div>
-      </div>
-      <div className="grid gap-4 border rounded-md p-4 md:ml-4">
-        <div className="grid gap-2">
-          <Label htmlFor={`color-${brand}-${model}`}>Цвет:</Label>
-          <div className="flex gap-2" id={`color-${brand}-${model}`}>
-            {colors.map((color) => (
-              <div
-                key={color.name}
-                className={`w-6 h-6 rounded-full cursor-pointer border-2 ${
-                  selectedColor === color.name ? "border-black" : "border-transparent"
-                }`}
-                style={{ backgroundColor: color.hex }}
-                onClick={() => setSelectedColor(color.name)}
-                role="radio"
-                aria-checked={selectedColor === color.name}
-                aria-label={color.name}
-              />
-            ))}
+    <>
+      <Card className="w-full max-w-4xl border-2 border-black">
+        <CardContent className="p-8">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+            {/* Image Section */}
+            <div className="flex aspect-[4/3] items-center justify-center rounded bg-gray-200">
+              <ImageIcon className="h-16 w-16 text-gray-500" />
+            </div>
+            {/* Details Section */}
+            <div className="space-y-6">
+              {/* Brand and Model */}
+              <div>
+                <h1 className="mb-1 text-4xl font-bold text-black">Honda</h1>
+                <h2 className="text-2xl text-black">Civic</h2>
+              </div>
+              {/* Configuration */}
+              <div className="space-y-2">
+                <label className="text-lg font-medium text-black">Configuration:</label>
+                <Select value={selectedConfig} onValueChange={handleConfigChange}>
+                  <SelectTrigger className="w-48 border-2 border-black">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableConfigurations.map(config => (
+                      <SelectItem key={config.value} value={config.value}>
+                        {config.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {/* Engine and Color Row */}
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {/* Engine */}
+                <div className="space-y-2">
+                  <label className="text-lg font-medium text-black">Engine:</label>
+                  <Select value={selectedEngine} onValueChange={setSelectedEngine}>
+                    <SelectTrigger className="w-40 border-2 border-black">
+                      <SelectValue placeholder="Select engine" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {currentConfig.Engine.map(engine => (
+                        <SelectItem key={engine} value={engine}>
+                          {engine}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {/* Color */}
+                <div className="space-y-2">
+                  <label className="text-lg font-medium text-black">Color:</label>
+                  <div className="flex flex-wrap gap-2">
+                    {currentConfig.Color.map(color => (
+                      <button
+                        key={color}
+                        onClick={() => setSelectedColor(color)}
+                        className={`h-8 w-8 rounded-full border-2 transition-all hover:border-gray-500 ${color} ${
+                          selectedColor === color ? 'border-gray-800 ring-2 ring-gray-400' : 'border-gray-300'
+                        }`}
+                        title={color}
+                      />
+                    ))}
+                  </div>
+                  {selectedColor && (
+                    <p className="text-sm text-gray-600">
+                      Selected: {currentConfig.Color.find(c => c === selectedColor)}
+                    </p>
+                  )}
+                </div>
+              </div>
+              {/* Price and Actions */}
+              <div className="flex items-end justify-between pt-4">
+                <div className="text-right">
+                  <div className="mb-1 text-lg font-medium text-black">Price:</div>
+                  <div className="text-2xl font-bold text-black">${currentConfig.Price.toLocaleString()}</div>
+                </div>
+                <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    className="border-2 border-blue-500 px-8 py-2 text-blue-500 hover:bg-blue-50"
+                    disabled={!selectedEngine || !selectedColor}
+                    onClick={confirmationHandler}
+                  >
+                    Buy
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border-2 border-blue-500 px-6 py-2 text-blue-500 hover:bg-blue-50"
+                    disabled={!selectedEngine || !selectedColor}
+                    onClick={testDriveHandler}
+                  >
+                    Test Drive
+                  </Button>
+                </div>
+              </div>
+              {/* Configuration Summary */}
+              {(selectedEngine || selectedColor) && (
+                <div className="mt-4 rounded border bg-gray-50 p-4">
+                  <h3 className="mb-2 font-medium text-black">Your Selection:</h3>
+                  <div className="space-y-1 text-sm text-gray-700">
+                    <p>Configuration: {selectedConfig}</p>
+                    {selectedEngine && <p>Engine: {selectedEngine}</p>}
+                    {selectedColor && <p>Color: {selectedColor}</p>}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor={`engine-${brand}-${model}`}>Двигатель:</Label>
-          <Select value={selectedEngine} onValueChange={setSelectedEngine}>
-            <SelectTrigger id={`engine-${brand}-${model}`}>
-              <SelectValue placeholder="Выберите двигатель" />
-            </SelectTrigger>
-            <SelectContent>
-              {engineOptions.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor={`configuration-${brand}-${model}`}>Комплектация:</Label>
-          <Select value={selectedConfiguration} onValueChange={setSelectedConfiguration}>
-            <SelectTrigger id={`configuration-${brand}-${model}`}>
-              <SelectValue placeholder="Выберите комплектацию" />
-            </SelectTrigger>
-            <SelectContent>
-              {configurationOptions.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
+
+      <Dialog open={isShownBuyConfirmation} onOpenChange={setIsShownBuyConfirmation}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle>Подтверждение покупки</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="mb-4 text-center text-lg">Вы точно хотите создать сделку по этому автомобилю?</p>
+            <div className="rounded-lg bg-gray-50 p-4 text-center">
+              <p className="font-semibold">
+                {car.brand} {car.model}
+              </p>
+              <p className="text-sm text-gray-600">{selectedColor && `Цвет: ${selectedColor}`}</p>
+              <p className="text-sm text-gray-600">{selectedEngine && `Двигатель: ${selectedEngine}`}</p>
+              <p className="text-sm text-gray-600">{selectedConfig && `Комплектация: ${selectedConfig}`}</p>
+            </div>
+          </div>
+          <DialogFooter className="flex justify-center gap-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsShownBuyConfirmation(false);
+              }}
+            >
+              Отмена
+            </Button>
+            <Button
+              onClick={() => {
+                buyHandler();
+              }}
+            >
+              Принять
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Calendar Dialog */}
       <Dialog open={showCalendar} onOpenChange={setShowCalendar}>
         <DialogContent className="sm:max-w-[425px]">
@@ -134,22 +243,22 @@ car
             <Calendar
               mode="single"
               selected={selectedDate}
-              onSelect={(date) => {
-                setSelectedDate(date)
+              onSelect={date => {
+                setSelectedDate(date);
                 if (date) {
-                  setShowCalendar(false)
-                  setShowTimeSlots(true)
+                  setShowCalendar(false);
+                  setShowTimeSlots(true);
                 }
               }}
-              disabled={(date) => date < new Date()}
+              disabled={date => date < new Date()}
               className="rounded-md border"
               locale={ru}
               weekStartsOn={1}
               formatters={{
-                formatCaption: (date) => {
-                  const month = date.toLocaleString("ru-RU", { month: "long" })
-                  const year = date.getFullYear()
-                  return `${month.charAt(0).toUpperCase() + month.slice(1)} ${year}`
+                formatCaption: (date, options) => {
+                  const month = date.toLocaleString('ru-RU', { month: 'long' });
+                  const year = date.getFullYear();
+                  return `${month.charAt(0).toUpperCase() + month.slice(1)} ${year}`;
                 },
               }}
             />
@@ -162,21 +271,21 @@ car
         <DialogContent className="sm:max-w-[400px]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Clock className="w-5 h-5" />
+              <Clock className="h-5 w-5" />
               Выберите время
             </DialogTitle>
             {selectedDate && <p className="text-sm text-gray-600">{formatDateInRussian(selectedDate)}</p>}
           </DialogHeader>
-          <div className="grid grid-cols-3 gap-2 py-4 max-h-60 overflow-y-auto">
-            {timeSlots.map((time) => (
+          <div className="grid max-h-60 grid-cols-3 gap-2 overflow-y-auto py-4">
+            {timeSlots.map(time => (
               <Button
                 key={time}
                 variant="outline"
                 className="h-10 text-sm"
                 onClick={() => {
-                  setSelectedTime(time)
-                  setShowTimeSlots(false)
-                  setShowConfirmation(true)
+                  setSelectedTime(time);
+                  setShowTimeSlots(false);
+                  setShowConfirmation(true);
                 }}
               >
                 {time}
@@ -193,9 +302,9 @@ car
             <DialogTitle>Подтверждение записи на тест-драйв</DialogTitle>
           </DialogHeader>
           <div className="py-4">
-            <p className="text-center text-lg mb-4">Вы уверены, что хотите забронировать это время?</p>
+            <p className="mb-4 text-center text-lg">Вы уверены, что хотите забронировать это время?</p>
             {selectedDate && selectedTime && (
-              <div className="bg-gray-50 p-4 rounded-lg text-center">
+              <div className="rounded-lg bg-gray-50 p-4 text-center">
                 <p className="font-semibold">
                   {brand} {model}
                 </p>
@@ -204,24 +313,24 @@ car
               </div>
             )}
           </div>
-          <DialogFooter className="flex gap-2 justify-center">
+          <DialogFooter className="flex justify-center gap-2">
             <Button
               variant="outline"
               onClick={() => {
-                setShowConfirmation(false)
-                setSelectedDate(undefined)
-                setSelectedTime("")
+                setShowConfirmation(false);
+                setSelectedDate(undefined);
+                setSelectedTime('');
               }}
             >
               Отмена
             </Button>
             <Button
               onClick={() => {
-                setShowConfirmation(false)
-                setSelectedDate(undefined)
-                setSelectedTime("")
+                setShowConfirmation(false);
+                setSelectedDate(undefined);
+                setSelectedTime('');
                 // Here you would typically handle the booking confirmation
-                alert("Тест-драйв успешно забронирован!")
+                alert('Тест-драйв успешно забронирован!');
               }}
             >
               Принять
@@ -229,6 +338,46 @@ car
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
-  )
+      {/* Buy Confirmation Dialog */}
+      <Dialog open={showBuyConfirmation} onOpenChange={setShowBuyConfirmation}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle>Подтверждение покупки</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="mb-4 text-center text-lg">Вы точно хотите создать сделку по этому автомобилю?</p>
+            <div className="rounded-lg bg-gray-50 p-4 text-center">
+              <p className="font-semibold">
+                {brand} {model}
+              </p>
+              <p className="text-sm text-gray-600">{selectedColor && `Цвет: ${selectedColor}`}</p>
+              <p className="text-sm text-gray-600">{selectedEngine && `Двигатель: ${selectedEngine}`}</p>
+              <p className="text-sm text-gray-600">
+                {selectedConfiguration && `Комплектация: ${selectedConfiguration}`}
+              </p>
+            </div>
+          </div>
+          <DialogFooter className="flex justify-center gap-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowBuyConfirmation(false);
+              }}
+            >
+              Отмена
+            </Button>
+            <Button
+              onClick={() => {
+                setShowBuyConfirmation(false);
+                // Here you would typically handle the purchase confirmation
+                alert('Сделка успешно создана!');
+              }}
+            >
+              Принять
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
 }
