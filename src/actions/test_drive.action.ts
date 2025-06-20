@@ -1,9 +1,17 @@
 import { testDriveApiRoutes } from '@/constants/routes';
 import type { TestDriveTypeOut } from '@/types/test-drive/test_drive.Out.type';
+import type { UUID } from 'crypto';
 
-export const fetchAvailableSlots = async (): Promise<string[]> => {
+export const fetchAvailableSlots = async (queryParams: { carId: UUID; date: Date }): Promise<string[]> => {
   try {
-    const response = await fetch(import.meta.env.VITE_API_URL + testDriveApiRoutes.availableSlots, {
+    //URL with query
+    const url = new URL(testDriveApiRoutes.availableSlots, import.meta.env.VITE_API_URL);
+    url.searchParams.append('date', queryParams.date.toDateString());
+    url.searchParams.append('carId', queryParams.carId);
+
+    // console.log('url', url.toString());
+
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

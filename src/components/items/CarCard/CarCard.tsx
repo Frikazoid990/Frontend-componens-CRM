@@ -20,7 +20,9 @@ interface CarCardProps {
 }
 
 export function CarCard({ car }: CarCardProps) {
-  const [initialConfigName, initialConfig] = Object.entries(car.configurationOptions)[0];
+  console.log('car:', car);
+
+  const [initialConfigName, initialConfig] = Object.entries(car.configurations)[0];
 
   const user = useSession();
 
@@ -31,8 +33,8 @@ export function CarCard({ car }: CarCardProps) {
   const [isShownBuyConfirmation, setIsShownBuyConfirmation] = useState<boolean>(false);
   const [isShownTestDriveConfirmation, setIsShownTestDriveConfirmation] = useState<boolean>(false);
 
-  const currentConfig = car.configurationOptions[selectedConfig];
-  const availableConfigurations = Object.keys(car.configurationOptions).map(key => ({
+  const currentConfig = car.configurations[selectedConfig];
+  const availableConfigurations = Object.keys(car.configurations).map(key => ({
     value: key,
     name: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize first letter
   }));
@@ -54,7 +56,7 @@ export function CarCard({ car }: CarCardProps) {
       selectedConfiguration: selectedConfig,
       selectedOptions: {
         Engine: selectedEngine,
-        Price: currentConfig.Price,
+        Price: currentConfig.Price[0],
         Color: selectedColor,
       },
     };
@@ -203,6 +205,7 @@ export function CarCard({ car }: CarCardProps) {
 
       <TestDriveConfirmationDialog
         isShown={isShownTestDriveConfirmation} // Replace with actual state to control visibility
+        carId={car.id}
         brand={car.brand}
         model={car.model}
         setIsShown={setIsShownTestDriveConfirmation} // Replace with actual state handler

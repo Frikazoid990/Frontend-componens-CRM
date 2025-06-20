@@ -4,7 +4,7 @@ import { ru } from 'date-fns/locale';
 interface Props {
   date?: Date;
   onDateSelect: (date?: Date) => void;
-  onChangeStep: (step: 'time' | 'confirmation') => void;
+  onChangeStep: (step: 'time') => void;
 }
 
 const TestDriveConfirmationDateStep = ({ date, onDateSelect, onChangeStep }: Props) => {

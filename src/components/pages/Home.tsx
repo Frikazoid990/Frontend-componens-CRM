@@ -15,66 +15,16 @@ const Home = () => {
     });
   }, []);
 
+  useEffect(() => {
+    console.log('Cars: ', cars);
+  }, [cars]);
+
   return (
     <div className="container mx-auto p-6">
       <h1 className="mb-6 text-3xl font-bold">Каталог автомобилей</h1>
-      <div className="grid gap-6">
-        {cars.map((car, index) => (
-          <CarCard key={index} car={car} />
-        ))}
-      </div>
+      <div className="grid gap-6">{cars && cars?.map((car, index) => <CarCard key={index} car={car} />)}</div>
     </div>
   );
 };
 
 export default Home;
-
-//  const carData = [
-//     {
-//       brand: "Honda",
-//       model: "Civic",
-//       description:
-//         "Тип кузова — 4‑дверный седан (5‑местный). Компоновка — FWD, AWD (для США). Двигатель — ДВС, гибрид. Трансмиссия — АКПП, МКПП.",
-//       imageSrc: HondaCivicImage, // Исправлено: используем свойство .src импортированного изображения
-//       imageWidth: 200, // Добавлены явные параметры ширины
-//       imageHeight: 150, // Добавлены явные параметры высоты
-//       colors: [
-//         { name: "purple", hex: "#800080" },
-//         { name: "green", hex: "#008000" },
-//         { name: "blue", hex: "#0000FF" },
-//         { name: "red", hex: "#FF0000" },
-//       ],
-//       engineOptions: ["V8", "V6", "I4"],
-//       configurationOptions: ["Premium", "Sport", "Standard"],
-//     },
-//     {
-//       brand: "Toyota",
-//       model: "Camry",
-//       description: "Тип кузова — 4‑дверный седан (5‑местный). Компоновка — FWD, AWD (для США). Двигатель — ДВС, гибрид. Трансмиссия — АКПП, МКПП.",
-//       imageSrc: Camry,
-//       imageWidth: 200, // Добавлены явные параметры ширины
-//       imageHeight: 150, // Добавлены явные параметры высоты
-//       colors: [
-//         { name: "black", hex: "#000000" },
-//         { name: "white", hex: "#FFFFFF" },
-//         { name: "silver", hex: "#C0C0C0" },
-//       ],
-//       engineOptions: ["V6", "I4 Hybrid"],
-//       configurationOptions: ["LE", "SE", "XLE"],
-//     },
-//     {
-//       brand: "Ford",
-//       model: "Focus RS",
-//       description: 'Ford Focus RS (2016–2018) – это высокопроизводительная версия компактного хэтчбека Ford Focus, разработанная подразделением Ford Performance. Эта модель сочетает в себе агрессивный дизайн, мощный двигатель и полный привод с технологией Drift Mode, что делает её одной из самых впечатляющих "горячих" версий в своём классе.',
-//       imageSrc: Focus,
-//       // imageWidth: 200, // Добавлены явные параметры ширины
-//       // imageHeight: 150, // Добавлены явные параметры высоты
-//       colors: [
-//         { name: "red", hex: "#FF0000" },
-//         { name: "blue", hex: "#0000FF" },
-//         { name: "yellow", hex: "#FFFF00" },
-//       ],
-//       engineOptions: ["V8 GT", "EcoBoost"],
-//       configurationOptions: ["GT Premium", "EcoBoost Premium", "Mach 1"],
-//     },
-//   ]

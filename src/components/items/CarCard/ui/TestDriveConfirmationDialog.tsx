@@ -1,5 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { formatDateInRussian } from '@/lib/format';
+import type { UUID } from 'crypto';
 import { Clock } from 'lucide-react';
 import { useState } from 'react';
 import TestDriveConfirmationDateStep from './TestDriveConfirmationDateStep';
@@ -10,6 +11,7 @@ interface Props {
   isShown: boolean;
   brand: string;
   model: string;
+  carId: UUID;
   setIsShown: (isShown: boolean) => void;
 
   onSubmit: (planedDate: Date) => void;
@@ -18,7 +20,7 @@ interface Props {
 
 export type StepType = 'date' | 'time' | 'confirmation';
 
-const TestDriveConfirmationDialog = ({ isShown, brand, model, setIsShown, onSubmit, onCancel }: Props) => {
+const TestDriveConfirmationDialog = ({ isShown, brand, model, carId, setIsShown, onSubmit, onCancel }: Props) => {
   const [currentStep, setCurrentStep] = useState<StepType>('date');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -45,7 +47,14 @@ const TestDriveConfirmationDialog = ({ isShown, brand, model, setIsShown, onSubm
       header: <DialogTitle>Выберите дату тест-драйва</DialogTitle>,
     },
     time: {
-      content: <TestDriveConfirmationTimeStep onChangeStep={setCurrentStep} onTimeSelect={setSelectedTime} />,
+      content: (
+        <TestDriveConfirmationTimeStep
+          date={selectedDate ?? new Date()}
+          carId={carId}
+          onChangeStep={setCurrentStep}
+          onTimeSelect={setSelectedTime}
+        />
+      ),
       header: (
         <>
           <DialogTitle className="flex items-center gap-2">

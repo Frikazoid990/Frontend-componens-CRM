@@ -1,17 +1,24 @@
 import { fetchAvailableSlots } from '@/actions/test_drive.action';
 import { Button } from '@/components/ui/button';
+import type { UUID } from 'crypto';
 import { useEffect, useState } from 'react';
 
 interface Props {
+  date: Date;
+  carId: UUID;
   onTimeSelect: (time: string) => void;
   onChangeStep: (step: 'confirmation') => void;
 }
 
-const TestDriveConfirmationTimeStep = ({ onTimeSelect, onChangeStep }: Props) => {
+const TestDriveConfirmationTimeStep = ({ date, carId, onTimeSelect, onChangeStep }: Props) => {
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
 
   useEffect(() => {
-    fetchAvailableSlots().then(slots => {
+    fetchAvailableSlots({
+      date,
+      carId,
+    }).then(slots => {
+      console.log(slots);
       setTimeSlots(slots);
     });
   }, []);

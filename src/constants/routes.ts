@@ -1,57 +1,52 @@
-	export const apiRoute = '/api/cars';
+export const apiRoute = '/api/cars';
 
+export const carApiRoutes = {
+  allCar: '/car/getallcar',
+};
 
-	export const carApiRoutes = {
-		allCar :'/car/getallcars',
-	}
+export const authApiRoutes = {
+  signIn: '/auth/signIn',
+  registration: '/auth/registration',
+};
 
-	export const authApiRoutes = {
-		signIn: '/auth/signIn',
-		registration: '/auth/registration',
-	}
+export const dealApiRoutes = {
+  addDeal: '/deal/add-deal',
 
-	export const dealApiRoutes = {
-		addDeal: '/deal/add-deal',
+  updateDealWithEmployee: (dealId: string) => `/deal/update-deal-with-employee/${dealId}`,
 
-		updateDealWithEmployee: (dealId: string) =>  `/deal/update-deal-with-employee/${dealId}`,
+  updateDealWithStatus: (dealId: string) => `/deal/update-deal-with-status/${dealId}`,
 
-		updateDealWithStatus: (dealId: string) => `/deal/update-deal-with-status/${dealId}`,
+  updateDealWithIsCanceled: (dealId: string) => `/dea/update-deal-with-is-canceled/${dealId}`,
 
-		updateDealWithIsCanceled: (dealId : string) => `/dea/update-deal-with-is-canceled/${dealId}`,
+  getDeals: '/deal/get-all-deals',
+};
 
-		getDeals: '/deal/get-all-deals',
-	}
+export const testDriveApiRoutes = {
+  getTestDrives: '/test-drive/get-test-drives',
 
-	export const testDriveApiRoutes = {
-		getTestDrives: '/test-drive/get-test-drives',
+  updateTestDriveWithEmployee: (testDriveId: string) => `/test-drive/test-drive-update-employee/${testDriveId}`,
 
-		updateTestDriveWithEmployee: (testDriveId: string) => `/test-drive/test-drive-update-employee/${testDriveId}`,
-		
-		updateTestDriveWithStatus: (testDriveId: string) => `/test-drive/test-drive-update-status/${testDriveId}`,
+  updateTestDriveWithStatus: (testDriveId: string) => `/test-drive/test-drive-update-status/${testDriveId}`,
 
-		availableDays: `/test-drive/available-days`,
+  availableDays: `/test-drive/available-days`,
 
-		availableSlots: `/test-drive/available-slots`,
+  availableSlots: `/test-drive/available-slots`,
 
-		addTestDrive: `/test-drive/add-test-drive`,
-		
-	}
+  addTestDrive: `/test-drive/add-test-drive`,
+};
 
-	export const statusApiRoutes = {
-		getStatusTestDrives: `/statuses/get-statuses-test-drive`,
+export const statusApiRoutes = {
+  getStatusTestDrives: `/statuses/get-statuses-test-drive`,
 
-		getStatusDeals: `/statuses/get-statuses-deals`,
-	}
+  getStatusDeals: `/statuses/get-statuses-deals`,
+};
 
-	export const messageApiRoutes = {
-		addMessage: `/message/add-message`,
+export const messageApiRoutes = {
+  addMessage: `/message/add-message`,
 
-		getMessages: (chatId: number) => `/message/get-message-for-chat/${chatId}` 
-	}
+  getMessages: (chatId: number) => `/message/get-message-for-chat/${chatId}`,
+};
 
-	export const managerApiRoutes = {
-		getStaff: `/manager/get-staff`
-	}
-
-	
-
+export const managerApiRoutes = {
+  getStaff: `/manager/get-staff`,
+};
