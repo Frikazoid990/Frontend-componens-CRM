@@ -1,4 +1,5 @@
 import type { UUID } from 'crypto';
+import { jwtDecode } from 'jwt-decode';
 import { useMemo } from 'react';
 
 // {
@@ -32,9 +33,9 @@ export const useSession = () => {
         return null;
       }
 
-      const decodedToken = atob(token);
+      const decodedToken = jwtDecode(token);
 
-      return decodedToken ? JSON.parse(decodedToken) : null;
+      return decodedToken ? (decodedToken as SessionType) : null;
     } catch (error) {
       console.log('Error decoding token:', error);
       return null;

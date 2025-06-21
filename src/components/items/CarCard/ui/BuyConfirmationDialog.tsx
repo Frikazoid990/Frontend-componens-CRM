@@ -4,8 +4,8 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '
 interface Props {
   brand: string;
   model: string;
-  color: string;
-  engine: string;
+  colorName: string;
+  engine: string | null;
   config: string;
   isShown: boolean;
   setIsShown: (isShown: boolean) => void;
@@ -16,7 +16,7 @@ interface Props {
 const BuyConfirmationDialog = ({
   brand,
   model,
-  color,
+  colorName,
   engine,
   config,
 
@@ -38,7 +38,7 @@ const BuyConfirmationDialog = ({
             <p className="font-semibold">
               {brand} {model}
             </p>
-            <p className="text-sm text-gray-600">{color && `Цвет: ${color}`}</p>
+            <p className="text-sm text-gray-600">{colorName && `Цвет: ${colorName}`}</p>
             <p className="text-sm text-gray-600">{engine && `Двигатель: ${engine}`}</p>
             <p className="text-sm text-gray-600">{config && `Комплектация: ${config}`}</p>
           </div>

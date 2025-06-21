@@ -35,6 +35,13 @@ const TestDriveConfirmationDialog = ({ isShown, brand, model, carId, setIsShown,
     onSubmit(dateWithTime);
   };
 
+  const cancelHandler = () => {
+    setCurrentStep('date');
+    setSelectedDate(undefined);
+    setSelectedTime(null);
+    onCancel();
+  };
+
   const contentByStepTable: Record<StepType, { content: React.ReactNode; header: React.ReactNode }> = {
     date: {
       content: (
@@ -70,7 +77,7 @@ const TestDriveConfirmationDialog = ({ isShown, brand, model, carId, setIsShown,
         <TestDriveConfirmationFinalStep
           date={selectedDate}
           time={selectedTime}
-          onCancel={onCancel}
+          onCancel={cancelHandler}
           onSubmit={confirmTestDriveHandler}
           brand={brand}
           model={model}
@@ -84,7 +91,15 @@ const TestDriveConfirmationDialog = ({ isShown, brand, model, carId, setIsShown,
   const currentHeader = contentByStepTable[currentStep].header;
 
   return (
-    <Dialog open={isShown} onOpenChange={setIsShown}>
+    <Dialog
+      open={isShown}
+      onOpenChange={value => {
+        if (!isShown) {
+          cancelHandler();
+        }
+        setIsShown(value);
+      }}
+    >
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>{currentHeader}</DialogHeader>
         {currentContent}

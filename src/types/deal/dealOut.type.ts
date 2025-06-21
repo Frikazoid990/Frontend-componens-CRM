@@ -8,7 +8,10 @@ export interface DealTypeOut {
 }
 
 interface ModelOptionsForDeal {
-  Engine: string;
-  Price: string;
-  Color: string;
+  engine: string;
+
+  color: {
+    name: string;
+    hex: string;
+  };
 }

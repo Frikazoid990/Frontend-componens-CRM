@@ -25,19 +25,24 @@ const TestDriveConfirmationTimeStep = ({ date, carId, onTimeSelect, onChangeStep
 
   return (
     <div className="grid max-h-60 grid-cols-3 gap-2 overflow-y-auto py-4">
-      {timeSlots.map(time => (
-        <Button
-          key={time}
-          variant="outline"
-          className="h-10 text-sm"
-          onClick={() => {
-            onTimeSelect(time);
-            onChangeStep('confirmation');
-          }}
-        >
-          {time}
-        </Button>
-      ))}
+      {timeSlots.map(time => {
+        const [h, m] = time.split(':');
+        const formattedTimeStr = `${h}:${m}`;
+
+        return (
+          <Button
+            key={time}
+            variant="outline"
+            className="h-10 text-sm"
+            onClick={() => {
+              onTimeSelect(time);
+              onChangeStep('confirmation');
+            }}
+          >
+            {formattedTimeStr}
+          </Button>
+        );
+      })}
     </div>
   );
 };

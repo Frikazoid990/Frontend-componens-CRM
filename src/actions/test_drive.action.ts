@@ -24,7 +24,7 @@ export const fetchAvailableSlots = async (queryParams: { carId: UUID; date: Date
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    return data.timeSlots ?? [];
+    return data ?? [];
   } catch (error) {
     console.error('Error fetching available slots:', error);
     return [];

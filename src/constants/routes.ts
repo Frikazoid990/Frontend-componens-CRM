@@ -1,3 +1,5 @@
+import type { UUID } from 'crypto';
+
 export const apiRoute = '/api/cars';
 
 export const carApiRoutes = {
@@ -5,7 +7,7 @@ export const carApiRoutes = {
 };
 
 export const authApiRoutes = {
-  signIn: '/auth/signIn',
+  signIn: '/auth/signin',
   registration: '/auth/registration',
 };
 
@@ -19,6 +21,8 @@ export const dealApiRoutes = {
   updateDealWithIsCanceled: (dealId: string) => `/dea/update-deal-with-is-canceled/${dealId}`,
 
   getDeals: '/deal/get-all-deals',
+
+  getDealForClient: '/deal/get-deal-for-client',
 };
 
 export const testDriveApiRoutes = {
@@ -33,6 +37,8 @@ export const testDriveApiRoutes = {
   availableSlots: `/test-drive/available-slots`,
 
   addTestDrive: `/test-drive/add-test-drive`,
+
+  getTestDrivesForClient: (clientId: UUID) => `/test-drive/get-test-drives-for-client/${clientId}`,
 };
 
 export const statusApiRoutes = {
