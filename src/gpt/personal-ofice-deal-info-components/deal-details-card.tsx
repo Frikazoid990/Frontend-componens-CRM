@@ -1,12 +1,13 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface DealDetailsCardProps {
-  startDate: string
-  manager: string
-  currentOffer: string
+  startDate: string;
+  manager: string;
+  currentOffer: string;
+  status: string;
 }
 
-export function DealDetailsCard({ startDate, manager, currentOffer }: DealDetailsCardProps) {
+export function DealDetailsCard({ startDate, manager, currentOffer, status }: DealDetailsCardProps) {
   return (
     <Card className="w-full">
       <CardHeader>
@@ -17,6 +18,9 @@ export function DealDetailsCard({ startDate, manager, currentOffer }: DealDetail
           <span className="font-medium">Дата начла сделки:</span> {startDate}
         </p>
         <p>
+          <span className="font-medium">Статус: </span> {status}
+        </p>
+        <p>
           <span className="font-medium">Ответственный менеджер:</span> {manager}
         </p>
         <p>
@@ -24,5 +28,5 @@ export function DealDetailsCard({ startDate, manager, currentOffer }: DealDetail
         </p>
       </CardContent>
     </Card>
-  )
+  );
 }

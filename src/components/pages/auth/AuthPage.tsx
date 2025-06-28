@@ -1,13 +1,14 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { authApiRoutes } from '@/constants/routes';
+import { useSession } from '@/hooks/useSession';
 import { useNavigate } from '@tanstack/react-router';
 import type { UUID } from 'crypto';
 import { CarIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface LoginFormType {
   phoneNumber: string;
@@ -37,11 +38,11 @@ const AuthPage = () => {
   const [loginForm, setLoginForm] = useState<LoginFormType>(initialLoginForm);
   const [registerForm, setRegisterFrom] = useState<RegisterFormType>(initialRegisterForm);
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     if (activeTab === 'login') {
-      loginHandler(loginForm);
+      await loginHandler(loginForm);
     } else if (activeTab === 'register') {
-      registerHandler(registerForm);
+      await registerHandler(registerForm);
     }
     setLoginForm(initialLoginForm);
     setRegisterFrom(initialRegisterForm);
@@ -101,14 +102,23 @@ const AuthPage = () => {
     }
   };
 
+  const user = useSession();
+  useEffect(() => {
+    if (user) navigate({ to: '/' });
+  }, []);
+
+  const enterHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      submitHandler();
+    }
+  };
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
         <div className="flex items-center justify-center space-x-2">
           <CarIcon className="h-6 w-6" />
-          <CardTitle className="text-2xl">Auto Dealer CRM</CardTitle>
+          <CardTitle className="text-2xl">Автоцентр</CardTitle>
         </div>
-        <CardDescription className="text-center">Access your dealership management system</CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs
@@ -123,28 +133,29 @@ const AuthPage = () => {
           className="w-full"
         >
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="register">Register</TabsTrigger>
+            <TabsTrigger value="login">Вход</TabsTrigger>
+            <TabsTrigger value="register">Регистрация</TabsTrigger>
           </TabsList>
 
           <TabsContent value="login" className="space-y-4 pt-4">
             <div className="space-y-2">
-              <Label htmlFor="login-phone">Phone Number</Label>
+              <Label htmlFor="login-phone">Номер телефона</Label>
               <Input
                 value={loginForm.phoneNumber}
                 id="login-phone"
                 type="tel"
-                placeholder="+1 (555) 000-0000"
+                placeholder="+79998887766"
                 onChange={e => {
                   setLoginForm(prev => ({
                     ...prev,
                     phoneNumber: e.target.value,
                   }));
                 }}
+                onKeyDown={enterHandler}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="login-password">Password</Label>
+              <Label htmlFor="login-password">Пароль</Label>
               <Input
                 value={loginForm.password}
                 id="login-password"
@@ -155,17 +166,18 @@ const AuthPage = () => {
                     password: e.target.value,
                   }));
                 }}
+                onKeyDown={enterHandler}
               />
             </div>
           </TabsContent>
 
           <TabsContent value="register" className="space-y-4 pt-4">
             <div className="space-y-2">
-              <Label htmlFor="register-name">Full Name</Label>
+              <Label htmlFor="register-name">ФИО</Label>
               <Input
                 value={registerForm.fullName}
                 id="register-name"
-                placeholder="John Smith Johnson"
+                placeholder="Иванов Иван Иванович"
                 onChange={e => {
                   setRegisterFrom(prev => ({
                     ...prev,
@@ -175,12 +187,12 @@ const AuthPage = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="register-phone">Phone Number</Label>
+              <Label htmlFor="register-phone">Номер телефона</Label>
               <Input
                 value={registerForm.phoneNumber}
                 id="register-phone"
                 type="tel"
-                placeholder="+1 (555) 000-0000"
+                placeholder="+79998887766"
                 onChange={e => {
                   setRegisterFrom(prev => ({
                     ...prev,
@@ -190,7 +202,7 @@ const AuthPage = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="register-password">Password</Label>
+              <Label htmlFor="register-password">Пароль</Label>
               <Input
                 value={registerForm.password}
                 id="register-password"
@@ -208,7 +220,7 @@ const AuthPage = () => {
       </CardContent>
       <CardFooter>
         <Button className="w-full" onClick={submitHandler}>
-          {activeTab === 'login' ? 'Login' : 'Register'}
+          {activeTab === 'login' ? 'Вход' : 'Регистрация'}
         </Button>
       </CardFooter>
     </Card>

@@ -1,5 +1,5 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,17 +7,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-
+} from '@/components/ui/dropdown-menu';
 
 export default function TestDriveDetailsPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       {/* Header */}
-      <header className="border-b px-4 py-3 flex items-center justify-between">
+      <header className="flex items-center justify-between border-b px-4 py-3">
         <div className="flex items-center gap-4">
           <h1 className="text-xl font-bold">Some Car Company Ltd.</h1>
-          <nav className="hidden md:flex items-center gap-4 text-sm">
+          <nav className="hidden items-center gap-4 text-sm md:flex">
             <a href="#" className="text-muted-foreground hover:text-primary">
               Car Models Link
             </a>
@@ -61,30 +60,11 @@ export default function TestDriveDetailsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 md:py-12">
-        <h2 className="text-3xl font-semibold mb-6">Test Drive Details Page</h2>
 
-        {/* Test Drive Information Section */}
-        <div className="border border-gray-300 p-6 mb-8 rounded-lg">
-          <p className="text-lg mb-2">
-            <span className="font-medium">Дата проведения:</span> 15.06.2025
-          </p>
-          <p className="text-lg mb-2">
-            <span className="font-medium">Время проведения:</span> 12:30
-          </p>
-          <p className="text-lg mb-2">
-            <span className="font-medium">Ответственный менеджер:</span> Эдуард Евгеньевич Крылов
-          </p>
-          <p className="text-lg">
-            <span className="font-medium">Машина:</span> Toyota <span className="font-medium ml-4">Модель:</span> Camry
-          </p>
-        </div>
-
-        {/* Promo Text Section */}
-        <div className="border border-gray-300 p-6 h-64 flex items-center justify-center text-center text-lg text-muted-foreground rounded-lg">
-          Some Promo Text with Links to other cars
-        </div>
-      </main>
+      {/* Promo Text Section */}
+      <div className="text-muted-foreground flex h-64 items-center justify-center rounded-lg border border-gray-300 p-6 text-center text-lg">
+        Some Promo Text with Links to other cars
+      </div>
     </div>
-  )
+  );
 }

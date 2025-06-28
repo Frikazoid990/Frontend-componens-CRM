@@ -1,8 +1,8 @@
-import type { UUID } from 'crypto'
+import type { UUID } from 'crypto';
 
-export interface Car{
-	id: UUID;
-	model: string;
-	brand:string;
+export interface Car {
+  id: UUID;
+  model: string;
+  brand: string;
+  imgPath: string;
 }
-

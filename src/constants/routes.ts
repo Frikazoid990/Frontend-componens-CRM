@@ -9,6 +9,7 @@ export const carApiRoutes = {
 export const authApiRoutes = {
   signIn: '/auth/signin',
   registration: '/auth/registration',
+  LogOut: '/auth/logout',
 };
 
 export const dealApiRoutes = {
@@ -22,7 +23,7 @@ export const dealApiRoutes = {
 
   getDeals: '/deal/get-all-deals',
 
-  getDealForClient: '/deal/get-deal-for-client',
+  getDealForClient: (clientId: UUID) => `/deal/get-deal-for-client/${clientId}`,
 };
 
 export const testDriveApiRoutes = {
@@ -39,10 +40,12 @@ export const testDriveApiRoutes = {
   addTestDrive: `/test-drive/add-test-drive`,
 
   getTestDrivesForClient: (clientId: UUID) => `/test-drive/get-test-drives-for-client/${clientId}`,
+
+  getTestDrive: (testDriveId: string) => `/test-drive/get-test-drive/${testDriveId}`,
 };
 
 export const statusApiRoutes = {
-  getStatusTestDrives: `/statuses/get-statuses-test-drive`,
+  getStatusTestDrives: `/statuses/get-statuses-test-drives`,
 
   getStatusDeals: `/statuses/get-statuses-deals`,
 };

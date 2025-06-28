@@ -56,3 +56,59 @@ export const createTestDriveAction = async (request: Omit<TestDriveTypeOut, 'id'
     console.error('Error creating test drive:', error instanceof Error ? error.message : 'Unknown error occurred');
   }
 };
+
+export const fetchUpdateStatus = async (request: number): Promise<void> => {
+  try {
+    const requestBody = JSON.stringify(request);
+    const url = window.location.href;
+    const parts = url.split('/');
+    const testDriveId = parts[parts.length - 1];
+    const response = await fetch(
+      import.meta.env.VITE_API_URL + testDriveApiRoutes.updateTestDriveWithStatus(testDriveId),
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: requestBody,
+      },
+    );
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    if (data.success) {
+      console.log('Update status:', data);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchUpdateEmployee = async (request: UUID): Promise<void> => {
+  try {
+    const requestBody = JSON.stringify(request);
+    const url = window.location.href;
+    const parts = url.split('/');
+    const testDriveId = parts[parts.length - 1];
+    const response = await fetch(
+      import.meta.env.VITE_API_URL + testDriveApiRoutes.updateTestDriveWithEmployee(testDriveId),
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: requestBody,
+      },
+    );
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    if (data.success) {
+      console.log('Update employee:', data);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -7,11 +7,12 @@ export interface DealTypeOut {
   selectedOptions: ModelOptionsForDeal;
 }
 
-interface ModelOptionsForDeal {
-  engine: string;
+interface ColorOption {
+  name: string;
+  hex: string;
+}
 
-  color: {
-    name: string;
-    hex: string;
-  };
+interface ModelOptionsForDeal {
+  engine: string[];
+  color: ColorOption[];
 }

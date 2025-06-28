@@ -30,7 +30,7 @@ const BuyConfirmationDialog = ({
     <Dialog open={isShown} onOpenChange={setIsShown}>
       <DialogContent className="sm:max-w-[400px]">
         <DialogHeader>
-          <DialogTitle>Подтверждение покупки</DialogTitle>
+          <DialogTitle>Подтверждение</DialogTitle>
         </DialogHeader>
         <div className="py-4">
           <p className="mb-4 text-center text-lg">Вы точно хотите создать сделку по этому автомобилю?</p>

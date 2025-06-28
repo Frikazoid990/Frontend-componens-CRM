@@ -15,9 +15,9 @@ const Home = () => {
     });
   }, []);
 
-  useEffect(() => {
-    console.log('Cars: ', cars);
-  }, [cars]);
+  // useEffect(() => {
+  //   console.log('Cars: ', cars);
+  // }, [cars]);
 
   return (
     <div className="container mx-auto p-6">

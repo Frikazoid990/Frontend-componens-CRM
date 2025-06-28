@@ -1,11 +1,23 @@
+import { useSession } from '@/hooks/useSession';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from '@tanstack/react-router';
 import HeaderOutline from './ui/HeaderOutline';
-import LoginButton from './ui/LoginButton';
+import LoginLabel from './ui/LoginLabel';
 
 const MainHeader = () => {
   const currentPath = useLocation();
   console.log('Current path:', currentPath);
+  const user = useSession();
+
+  const managerRoles = [`ADMIN`, `MANAGER`, `SENIORMANAGER`, `DIRECTOR`];
+
+  const isManagerRoute = currentPath.pathname.startsWith('/manager');
+
+  const menu =
+    managerRoles.includes(user?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? 'CLIENT') &&
+    isManagerRoute
+      ? managerMenuList
+      : userMenuList;
   return (
     <>
       <header
@@ -14,11 +26,11 @@ const MainHeader = () => {
       >
         <div className="flex items-center gap-11">
           <h1 className="text-primary text-3xl font-bold">
-            <Link to={'/'}>Car Naeb</Link>
+            <Link to={'/'}>Автосалон "Автоцентр XXI"</Link>
           </h1>
           <nav>
             <ul className="flex gap-11">
-              {userMenuList.map(item => (
+              {menu.map(item => (
                 <li
                   key={item.title}
                   className={cn(
@@ -34,7 +46,7 @@ const MainHeader = () => {
         </div>
 
         <div className="flex items-center gap-6">
-          <LoginButton />
+          <LoginLabel />
         </div>
       </header>
 
@@ -46,12 +58,12 @@ const MainHeader = () => {
 export default MainHeader;
 
 const userMenuList = [
-  { title: 'Cars', path: '/' },
-  { title: 'Personal Office', path: '/personal_office' },
+  { title: 'Каталог автомобилей', path: '/' },
+  { title: 'Личный кабинет клиента', path: '/personal_office' },
 ];
 
-// const managerMenuList = [
-// 	{ title: 'Dashboard', path: '/dashboard' },
-// 	{ title: 'Settings', path: '/settings' },
-// 	{ title: 'Users', path: '/users' },
-// ]
+const managerMenuList = [
+  { title: 'Dashboard', path: '/dashboard' },
+  { title: 'Settings', path: '/settings' },
+  { title: 'Users', path: '/users' },
+];
