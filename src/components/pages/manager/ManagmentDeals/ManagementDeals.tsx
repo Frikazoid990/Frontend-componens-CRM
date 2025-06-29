@@ -1,4 +1,5 @@
 import { dealApiRoutes, statusApiRoutes } from '@/constants/routes';
+import { useToken } from '@/hooks/useToken';
 import type { DealType } from '@/types/deal/deal.type';
 import type { DealStatusType } from '@/types/statuses/deal.status.type';
 import { DragDropContext, type DropResult } from '@hello-pangea/dnd'; // Using @hello-pangea/dnd as a modern fork
@@ -15,13 +16,15 @@ const ManagementDeals = () => {
   const [columns, setColumns] = useState<KanbanColumn[]>([]);
   const [statusesTable, setStatusesTable] = useState<Record<number, string> | null>(null);
   const [dealsTable, setDealsTable] = useState<Record<string, DealType[]> | null>(null); // Assuming dealsTable is an array of Deal objects
-
+  const token = useToken();
   const fetchStatuses = async () => {
     try {
-      const response = await fetch(import.meta.env.API_URL + statusApiRoutes.getStatusDeals, {
+      console.log('Fetching from:', import.meta.env.API_URL + statusApiRoutes.getStatusDeals);
+      const response = await fetch(import.meta.env.VITE_API_URL + statusApiRoutes.getStatusDeals, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
           // Add any other headers if needed, like authorization
         },
         credentials: 'include', // Include cookies for session management
@@ -69,10 +72,11 @@ const ManagementDeals = () => {
   };
   const fetchDeals = async () => {
     try {
-      const response = await fetch(import.meta.env.API_URL + dealApiRoutes.getDeals, {
+      const response = await fetch(import.meta.env.VITE_API_URL + dealApiRoutes.getDeals, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
           // Add any other headers if needed, like authorization
         },
         credentials: 'include', // Include cookies for session management
@@ -228,15 +232,19 @@ const ManagementDeals = () => {
     }
   };
   const updateDealAction = async (dealId: DealType['id'], dealStatusId: number) => {
+    debugger;
+
     try {
-      const apiUrl = import.meta.env.API_URL + dealApiRoutes.updateDealWithStatus(dealId);
+      const apiUrl = import.meta.env.VITE_API_URL + dealApiRoutes.updateDealWithStatus(dealId);
 
       const response = await fetch(apiUrl, {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           // Add any other headers if needed, like authorization
+          Authorization: `Bearer ${token}`,
         },
+
         credentials: 'include', // Include cookies for session management
         body: JSON.stringify(dealStatusId),
       });
