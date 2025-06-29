@@ -1,11 +1,12 @@
 import { testDriveApiRoutes } from '@/constants/routes';
+import { useToken } from '@/hooks/useToken';
 import { formatDateSafe } from '@/lib/format-data';
 import type { TestDriveType } from '@/types/test-drive/test_drive.type';
 import { useEffect, useState } from 'react';
 
 const TestDrivePage = () => {
   const [testDrive, setTestDrive] = useState<TestDriveType | null>();
-
+  const token = useToken();
   const fetchTestDrive = async (): Promise<TestDriveType | null> => {
     try {
       const url = window.location.href;
@@ -14,6 +15,9 @@ const TestDrivePage = () => {
       const response = await fetch(import.meta.env.VITE_API_URL + testDriveApiRoutes.getTestDrive(testDriveId), {
         method: 'GET',
         credentials: 'include',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       const testDrive: TestDriveType = await response.json();
       if (!response.ok) {

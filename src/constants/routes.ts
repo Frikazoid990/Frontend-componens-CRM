@@ -19,11 +19,15 @@ export const dealApiRoutes = {
 
   updateDealWithStatus: (dealId: string) => `/deal/update-deal-with-status/${dealId}`,
 
-  updateDealWithIsCanceled: (dealId: string) => `/dea/update-deal-with-is-canceled/${dealId}`,
+  updateDealWithIsCanceled: (dealId: string) => `/deal/update-deal-with-is-canceled/${dealId}`,
+
+  updateCurrentDealPrice: (dealId: string) => `/deal/update-current-deal-price/${dealId}`,
 
   getDeals: '/deal/get-all-deals',
 
   getDealForClient: (clientId: UUID) => `/deal/get-deal-for-client/${clientId}`,
+  getDealForManager: (managerId: UUID) => `/deal/get-deals-for-manager/${managerId}`,
+  getCurrentDeal: (dealId: string) => `/deal/get-current-deal/${dealId}`,
 };
 
 export const testDriveApiRoutes = {

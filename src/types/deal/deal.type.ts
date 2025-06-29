@@ -7,7 +7,7 @@ import type { ColorType } from '../car.type';
 export interface DealType {
   id: UUID;
   createdAt: Date;
-  isCanceled: boolean;
+  isCancelled: boolean;
   price: number;
   status: string;
   selectedConfiguration: string;

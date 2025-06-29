@@ -3,12 +3,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { dealApiRoutes, testDriveApiRoutes } from '@/constants/routes';
 import { useSession } from '@/hooks/useSession';
+import { useToken } from '@/hooks/useToken';
 import type { DealType } from '@/types/deal/deal.type';
 import type { TestDriveType } from '@/types/test-drive/test_drive.type';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 
 const PersonalOffice = () => {
+  const token = useToken();
   const [deal, setDeal] = useState<DealType | null>();
   const [testDrives, setTestDrives] = useState<TestDriveType[]>([]);
   const user = useSession();
@@ -23,6 +25,9 @@ const PersonalOffice = () => {
       const response = await fetch(import.meta.env.VITE_API_URL + dealApiRoutes.getDealForClient(user.id), {
         method: 'GET',
         credentials: 'include',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       const deal: DealType = await response.json();
       if (!response.ok) {
@@ -42,6 +47,9 @@ const PersonalOffice = () => {
       const response = await fetch(import.meta.env.VITE_API_URL + testDriveApiRoutes.getTestDrivesForClient(user.id), {
         method: 'GET',
         credentials: 'include',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       const testDrives: TestDriveType[] = await response.json();
       if (!response.ok) {

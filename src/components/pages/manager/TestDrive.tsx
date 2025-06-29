@@ -1,8 +1,13 @@
-import { fetchUpdateEmployee, fetchUpdateStatus } from '@/actions/test_drive.action';
+import { fetchStaff } from '@/actions/staff.action';
+import {
+  fetchStatusesForTestDrive,
+  fetchTestDriveForManager,
+  fetchUpdateEmployee,
+  fetchUpdateStatus,
+} from '@/actions/test_drive.action';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { managerApiRoutes, statusApiRoutes, testDriveApiRoutes } from '@/constants/routes';
 import { useSession } from '@/hooks/useSession';
 import { useToken } from '@/hooks/useToken';
 import type { Employee } from '@/types/Common types/employee.type';
@@ -21,75 +26,6 @@ const TestDriveDetailsCard = () => {
   const navigate = useNavigate();
   const user = useSession();
 
-  const fetchStaff = async (): Promise<Employee[]> => {
-    try {
-      if (!user) {
-        throw new Error('No user session');
-      }
-      const response = await fetch(import.meta.env.VITE_API_URL + managerApiRoutes.getStaff, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const staff: Employee[] = await response.json();
-      return staff;
-    } catch (error) {
-      console.log(error);
-      return [];
-    }
-  };
-
-  const fetchTestDriveForManager = async (): Promise<TestDriveType | null> => {
-    try {
-      if (!user) {
-        throw new Error('No user session');
-      }
-      const url = window.location.href;
-      const parts = url.split('/');
-      const testDriveId = parts[parts.length - 1];
-      const response = await fetch(import.meta.env.VITE_API_URL + testDriveApiRoutes.getTestDrive(testDriveId), {
-        method: 'GET',
-        credentials: 'include',
-      });
-      const testDrive: TestDriveType = await response.json();
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return testDrive ?? null;
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
-  };
-
-  const fetchStatusesForTestDrive = async (): Promise<TestDriveStatusesType[]> => {
-    try {
-      if (!user) {
-        throw new Error('No user session');
-      }
-      const response = await fetch(import.meta.env.VITE_API_URL + statusApiRoutes.getStatusTestDrives, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const statuses: TestDriveStatusesType[] = await response.json();
-      return statuses;
-    } catch (error) {
-      console.log(error);
-      return [];
-    }
-  };
-
   const updateStatus = () => {
     if (!user) return;
     setIsPending(true);
@@ -106,7 +42,7 @@ const TestDriveDetailsCard = () => {
     setIsPending(true);
     const employeeId: UUID | null = testDrive?.employee?.id ?? null;
     if (employeeId) {
-      fetchUpdateEmployee(employeeId).finally(() => setIsPending(false));
+      fetchUpdateEmployee(employeeId, token).finally(() => setIsPending(false));
     } else {
       setIsPending(false);
     }
@@ -122,9 +58,9 @@ const TestDriveDetailsCard = () => {
   useEffect(() => {
     const fetchData = async () => {
       const [testDrive, statuses, staff] = await Promise.all([
-        fetchTestDriveForManager(),
-        fetchStatusesForTestDrive(),
-        fetchStaff(),
+        fetchTestDriveForManager(user, token),
+        fetchStatusesForTestDrive(user, token),
+        fetchStaff(user, token),
       ]);
       setTestDrive(testDrive);
       setStatuses(statuses);

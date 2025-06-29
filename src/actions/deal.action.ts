@@ -1,14 +1,14 @@
 import { dealApiRoutes } from '@/constants/routes';
 import type { DealTypeOut } from '@/types/deal/dealOut.type';
 
-export const createDealAction = async (request: DealTypeOut): Promise<void> => {
+export const createDealAction = async (request: DealTypeOut, token: string): Promise<void> => {
   try {
     const requestBody = JSON.stringify(request);
-
     const response = await fetch(import.meta.env.VITE_API_URL + dealApiRoutes.addDeal, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: requestBody,
     });

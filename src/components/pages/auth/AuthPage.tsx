@@ -14,6 +14,7 @@ interface LoginFormType {
   phoneNumber: string;
   password: string;
 }
+
 interface RegisterFormType {
   fullName: string;
   phoneNumber: string;
@@ -24,6 +25,7 @@ const initialLoginForm: LoginFormType = {
   phoneNumber: '',
   password: '',
 };
+
 const initialRegisterForm: RegisterFormType = {
   fullName: '',
   phoneNumber: '',
@@ -32,31 +34,27 @@ const initialRegisterForm: RegisterFormType = {
 
 const AuthPage = () => {
   const navigate = useNavigate();
-
   const [activeTab, setActiveTab] = useState('login');
-
   const [loginForm, setLoginForm] = useState<LoginFormType>(initialLoginForm);
   const [registerForm, setRegisterFrom] = useState<RegisterFormType>(initialRegisterForm);
+  const [error, setError] = useState<string | null>(null); // <-- Состояние для ошибок
 
   const submitHandler = async () => {
+    setError(null); // Сброс предыдущей ошибки
     if (activeTab === 'login') {
       await loginHandler(loginForm);
     } else if (activeTab === 'register') {
       await registerHandler(registerForm);
     }
-    setLoginForm(initialLoginForm);
-    setRegisterFrom(initialRegisterForm);
-    navigate({ to: '/' });
   };
 
   const loginHandler = async (loginForm: LoginFormType): Promise<void> => {
-    if (!loginForm.password) throw new Error('Password is required');
-    if (!loginForm.phoneNumber) throw new Error('Phone number is required');
+    if (!loginForm.password || !loginForm.phoneNumber) {
+      setError('Все поля обязательны к заполнению');
+      return;
+    }
 
-    // debugger;
     try {
-      // const requestBody = JSON.stringify(loginForm);
-
       const formData = new FormData();
       formData.append('password', loginForm.password);
       formData.append('phoneNumber', loginForm.phoneNumber);
@@ -66,19 +64,25 @@ const AuthPage = () => {
         body: formData,
         credentials: 'include',
       });
+
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        setError('Неверный номер телефона или пароль');
+        return;
       }
+
+      navigate({ to: '/' });
     } catch (error) {
-      console.log(error instanceof Error ? error.message : 'Unknown error occurred');
+      console.error(error instanceof Error ? error.message : 'Unknown error occurred');
+      setError('Произошла ошибка. Попробуйте позже.');
     }
   };
 
   const registerHandler = async (registerForm: RegisterFormType): Promise<void> => {
-    // debugger;
-    if (!registerForm.password) throw new Error('Password is required');
-    if (!registerForm.phoneNumber) throw new Error('Phone number is required');
-    if (!registerForm.fullName) throw new Error('Full name is required');
+    if (!registerForm.password || !registerForm.phoneNumber || !registerForm.fullName) {
+      setError('Все поля обязательны к заполнению');
+      return;
+    }
+
     try {
       const requestBody = JSON.stringify(registerForm);
       const response = await fetch(import.meta.env.VITE_API_URL + authApiRoutes.registration, {
@@ -89,16 +93,19 @@ const AuthPage = () => {
         body: requestBody,
         credentials: 'include',
       });
+
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        setError('Ошибка регистрации. Попробуйте позже.');
+        return;
       }
 
       const createdUserId: UUID = await response.json();
       if (createdUserId) {
-        console.log('Deal created successfully:', createdUserId);
+        navigate({ to: '/' });
       }
     } catch (error) {
-      console.log(error instanceof Error ? error.message : 'Unknown error occurred');
+      console.error(error instanceof Error ? error.message : 'Unknown error occurred');
+      setError('Произошла ошибка. Попробуйте позже.');
     }
   };
 
@@ -112,6 +119,7 @@ const AuthPage = () => {
       submitHandler();
     }
   };
+
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
@@ -120,14 +128,19 @@ const AuthPage = () => {
           <CardTitle className="text-2xl">Автоцентр</CardTitle>
         </div>
       </CardHeader>
+
       <CardContent>
+        {/* --- Отображение ошибки здесь --- */}
+        {error && (
+          <div className="mb-4 rounded-md border border-red-100 bg-red-50 p-3 text-sm text-red-600">{error}</div>
+        )}
+
         <Tabs
           defaultValue="login"
           value={activeTab}
           onValueChange={value => {
             setLoginForm(initialLoginForm);
             setRegisterFrom(initialRegisterForm);
-
             setActiveTab(value);
           }}
           className="w-full"
@@ -218,9 +231,10 @@ const AuthPage = () => {
           </TabsContent>
         </Tabs>
       </CardContent>
+
       <CardFooter>
         <Button className="w-full" onClick={submitHandler}>
-          {activeTab === 'login' ? 'Вход' : 'Регистрация'}
+          {activeTab === 'login' ? 'Войти' : 'Зарегистрироваться'}
         </Button>
       </CardFooter>
     </Card>

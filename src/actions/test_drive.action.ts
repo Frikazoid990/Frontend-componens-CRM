@@ -1,8 +1,14 @@
-import { testDriveApiRoutes } from '@/constants/routes';
+import { statusApiRoutes, testDriveApiRoutes } from '@/constants/routes';
+import { type SessionType } from '@/hooks/useSession';
+import type { TestDriveStatusesType } from '@/types/statuses/test_drive.status.type';
 import type { TestDriveTypeOut } from '@/types/test-drive/test_drive.Out.type';
+import type { TestDriveType } from '@/types/test-drive/test_drive.type';
 import type { UUID } from 'crypto';
 
-export const fetchAvailableSlots = async (queryParams: { carId: UUID; date: Date }): Promise<string[]> => {
+export const fetchAvailableSlots = async (
+  queryParams: { carId: UUID; date: Date },
+  token: string,
+): Promise<string[]> => {
   try {
     //URL with query
     const url = new URL(testDriveApiRoutes.availableSlots, import.meta.env.VITE_API_URL);
@@ -15,6 +21,7 @@ export const fetchAvailableSlots = async (queryParams: { carId: UUID; date: Date
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       credentials: 'include',
     });
@@ -85,7 +92,7 @@ export const fetchUpdateStatus = async (request: number): Promise<void> => {
   }
 };
 
-export const fetchUpdateEmployee = async (request: UUID): Promise<void> => {
+export const fetchUpdateEmployee = async (request: UUID, token: string | null): Promise<void> => {
   try {
     const requestBody = JSON.stringify(request);
     const url = window.location.href;
@@ -97,6 +104,7 @@ export const fetchUpdateEmployee = async (request: UUID): Promise<void> => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: requestBody,
       },
@@ -110,5 +118,60 @@ export const fetchUpdateEmployee = async (request: UUID): Promise<void> => {
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const fetchTestDriveForManager = async (
+  user: SessionType | null,
+  token: string | null,
+): Promise<TestDriveType | null> => {
+  try {
+    if (!user) {
+      throw new Error('No user session');
+    }
+    const url = window.location.href;
+    const parts = url.split('/');
+    const testDriveId = parts[parts.length - 1];
+    const response = await fetch(import.meta.env.VITE_API_URL + testDriveApiRoutes.getTestDrive(testDriveId), {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const testDrive: TestDriveType = await response.json();
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return testDrive ?? null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const fetchStatusesForTestDrive = async (
+  user: SessionType | null,
+  token: string | null,
+): Promise<TestDriveStatusesType[]> => {
+  try {
+    if (!user) {
+      throw new Error('No user session');
+    }
+    const response = await fetch(import.meta.env.VITE_API_URL + statusApiRoutes.getStatusTestDrives, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const statuses: TestDriveStatusesType[] = await response.json();
+    return statuses;
+  } catch (error) {
+    console.log(error);
+    return [];
   }
 };

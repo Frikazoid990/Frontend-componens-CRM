@@ -7,6 +7,7 @@ import { createTestDriveAction } from '@/actions/test_drive.action';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useSession } from '@/hooks/useSession';
+import { useToken } from '@/hooks/useToken';
 import { cn } from '@/lib/utils';
 import type { CarType, ColorType } from '@/types/car.type';
 import type { DealTypeOut } from '@/types/deal/dealOut.type';
@@ -26,7 +27,7 @@ export function CarCard({ car }: CarCardProps) {
   const [initialConfigName, initialConfig] = Object.entries(car.configurations)[0];
 
   const user = useSession();
-
+  const token = useToken();
   const [selectedConfig, setSelectedConfig] = useState<string>(initialConfigName);
   const [selectedEngine, setSelectedEngine] = useState<string | null>(initialConfig.engine[0]);
   const [selectedColor, setSelectedColor] = useState<ColorType | null>(initialConfig.color[0]);
@@ -64,8 +65,7 @@ export function CarCard({ car }: CarCardProps) {
         color: [selectedColor], // оборачиваем в массив
       },
     };
-
-    createDealAction(request);
+    if (token) createDealAction(request, token);
   };
 
   const confirmTestDriveHandler = (planedDate: Date) => {
@@ -83,11 +83,11 @@ export function CarCard({ car }: CarCardProps) {
 
   return (
     <>
-      <Card className="w-full max-w-6xl">
+      <Card className="w-full max-w-[90%]">
         <CardContent className="p-6">
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[600px_1fr_1fr]">
             {/* Image Section */}
-            <div className="flex aspect-square items-center justify-center rounded bg-gray-200">
+            <div className="flex w-full items-center justify-center rounded bg-gray-200">
               <img
                 className="h-full w-full rounded object-cover"
                 src={car.imgPath || '/placeholder.svg'}
