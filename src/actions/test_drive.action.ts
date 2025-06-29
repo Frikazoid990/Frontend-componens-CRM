@@ -153,7 +153,7 @@ export const fetchTestDriveForManager = async (
 export const fetchStatusesForTestDrive = async (
   user: SessionType | null,
   token: string | null,
-): Promise<TestDriveStatusesType[]> => {
+): Promise<{ data?: TestDriveStatusesType[]; error?: string }> => {
   try {
     if (!user) {
       throw new Error('No user session');
@@ -169,9 +169,44 @@ export const fetchStatusesForTestDrive = async (
       throw new Error('Network response was not ok');
     }
     const statuses: TestDriveStatusesType[] = await response.json();
-    return statuses;
+    return { data: statuses };
   } catch (error) {
     console.log(error);
-    return [];
+    return {
+      error: error instanceof Error ? error.message : 'Failed to fetch test drive statuses',
+    };
+  }
+};
+
+export const fetchTestDrivesForManager = async (
+  user: SessionType | null,
+  token: string | null,
+): Promise<{ data?: TestDriveType[]; error?: string }> => {
+  try {
+    if (!user) {
+      throw new Error('No user session');
+    }
+
+    const url = import.meta.env.VITE_API_URL + testDriveApiRoutes.getTestDrives;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const testDrives: TestDriveType[] = await response.json();
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return {
+      data: testDrives,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      error: error instanceof Error ? error.message : 'Failed to fetch test drives',
+    };
   }
 };

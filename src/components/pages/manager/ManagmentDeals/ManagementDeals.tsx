@@ -18,7 +18,7 @@ const ManagementDeals = () => {
 
   const fetchStatuses = async () => {
     try {
-      const response = await fetch(process.env.API_URL + statusApiRoutes.getStatusDeals, {
+      const response = await fetch(import.meta.env.API_URL + statusApiRoutes.getStatusDeals, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ const ManagementDeals = () => {
   };
   const fetchDeals = async () => {
     try {
-      const response = await fetch(process.env.API_URL + dealApiRoutes.getDeals, {
+      const response = await fetch(import.meta.env.API_URL + dealApiRoutes.getDeals, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -229,7 +229,7 @@ const ManagementDeals = () => {
   };
   const updateDealAction = async (dealId: DealType['id'], dealStatusId: number) => {
     try {
-      const apiUrl = process.env.API_URL + dealApiRoutes.updateDealWithStatus(dealId);
+      const apiUrl = import.meta.env.API_URL + dealApiRoutes.updateDealWithStatus(dealId);
 
       const response = await fetch(apiUrl, {
         method: 'POST',

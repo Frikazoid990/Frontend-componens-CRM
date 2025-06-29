@@ -62,8 +62,14 @@ const TestDriveDetailsCard = () => {
         fetchStatusesForTestDrive(user, token),
         fetchStaff(user, token),
       ]);
+
+      if (statuses.error) {
+        console.error('Error fetching statuses:', statuses.error);
+      }
+      if (statuses.data) {
+        setStatuses(statuses.data);
+      }
       setTestDrive(testDrive);
-      setStatuses(statuses);
       setStaff(staff);
     };
     fetchData();
