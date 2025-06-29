@@ -66,3 +66,9 @@ export const managerApiRoutes = {
   getStaff: `/manager/get-staff`,
   getStatsForCurrentManager: (managerId: string) => `/manager/get-stats/${managerId}`,
 };
+
+export const reportsApiRoutes = {
+  getCarReport: `/reports/car-report`,
+  getFunnelReport: `/reports/funnel-report`,
+  getManagerReport: '/reports/manager-report',
+};
