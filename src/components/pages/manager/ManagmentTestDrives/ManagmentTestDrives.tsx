@@ -1,8 +1,8 @@
-import { fetchStatusesForTestDrive, fetchTestDrivesForManager } from '@/actions/test_drive.action';
+import { fetchTestDrivesForManager } from '@/actions/test_drive.action';
 import { Button } from '@/components/ui/button';
 import { useSession } from '@/hooks/useSession';
 import { useToken } from '@/hooks/useToken';
-import type { TestDriveType } from '@/types/test-drive/test_drive.type';
+import { TestDriveStatus, type TestDriveType } from '@/types/test-drive/test_drive.type';
 import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import ManagementTestDriveCard from './ui/ManagementTestDriveCard';
@@ -18,30 +18,21 @@ import ManagementTestDriveCard from './ui/ManagementTestDriveCard';
 // type TestDriveStatus = 'Not Assigned' | 'In Progress' | 'Completed' | 'Canceled';
 
 interface StatusSection {
-  id: string;
+  id: TestDriveStatus;
   title: string;
 }
 
 const ManagementTestDrives = () => {
-  const [testDrivesStatusSections, setTestDrivesStatusSections] = useState<StatusSection[]>([]);
-  const [statusesTable, setStatusesTable] = useState<Record<number, string> | null>(null);
   const [testDrivesTable, setTestDrivesTable] = useState<Record<string, TestDriveType[]> | null>(null);
 
   const user = useSession();
   const token = useToken();
 
   const fetchManagerData = async () => {
-    const [testDrives, statuses] = await Promise.all([
-      fetchTestDrivesForManager(user, token),
-      fetchStatusesForTestDrive(user, token),
-    ]);
+    const testDrives = await fetchTestDrivesForManager(user, token);
 
     if (testDrives.error) {
       console.error('Error fetching test drives:', testDrives.error);
-    }
-    if (statuses.error) {
-      console.error('Error fetching statuses:', statuses.error);
-      return;
     }
 
     if (testDrives.data) {
@@ -59,24 +50,6 @@ const ManagementTestDrives = () => {
         ),
       );
     }
-
-    if (statuses.data) {
-      const newStatusSections: StatusSection[] = statuses.data.map((status, index) => ({
-        id: status.value.toString(),
-        title: status.label,
-      }));
-
-      const newStatusesTable: Record<number, string> = statuses.data.reduce(
-        (acc, status) => {
-          acc[status.value] = status.label;
-          return acc;
-        },
-        {} as Record<number, string>,
-      );
-
-      setTestDrivesStatusSections(newStatusSections);
-      setStatusesTable(newStatusesTable);
-    }
   };
 
   useEffect(() => {
@@ -87,6 +60,11 @@ const ManagementTestDrives = () => {
     // Placeholder for create test drive functionality
     console.log('Create Test Drive clicked');
   };
+
+  const testDrivesStatusSections: StatusSection[] = [
+    { id: TestDriveStatus.NotAssigned, title: 'Not Assigned' },
+    { id: TestDriveStatus.InProgress, title: 'In Progress' },
+  ];
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-6 p-6">
@@ -99,7 +77,7 @@ const ManagementTestDrives = () => {
       </div>
 
       {/* Status Sections */}
-      <div className="space-y-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {testDrivesStatusSections.map(status => (
           <div key={status.id} className="rounded-lg border border-gray-300">
             {/* Section Header */}
@@ -108,12 +86,18 @@ const ManagementTestDrives = () => {
             </div>
 
             {/* Section Content */}
-            <div className="min-h-[100px] p-4">
-              {testDrivesTable && testDrivesTable[status.title]?.length > 0 ? (
+            <div className="max-h-[400px] min-h-[200px] overflow-y-auto p-4">
+              {!!testDrivesTable && testDrivesTable[status.title]?.length > 0 ? (
                 <div className="space-y-3">
-                  {testDrivesTable[status.title].map(testDrive => (
-                    <ManagementTestDriveCard key={testDrive.id} testDrive={testDrive} />
-                  ))}
+                  {testDrivesTable && testDrivesTable[status.title]?.length > 0 ? (
+                    <div className="space-y-3">
+                      {testDrivesTable[status.title].map(testDrive => (
+                        <ManagementTestDriveCard key={testDrive.id} testDrive={testDrive} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="py-8 text-center text-gray-500">No test drives in this status</div>
+                  )}
                 </div>
               ) : (
                 <div className="py-8 text-center text-gray-500">No test drives in this status</div>
@@ -127,3 +111,23 @@ const ManagementTestDrives = () => {
 };
 
 export default ManagementTestDrives;
+
+// {/* <div key={status.id} className="rounded-lg border border-gray-300">
+//             {/* Section Header */}
+//             <div className="border-b border-gray-300 bg-gray-50 px-4 py-3">
+//               <h2 className="text-lg font-semibold text-gray-800">{status.title} Test Drives:</h2>
+//             </div>
+
+//             {/* Section Content */}
+//             <div className="min-h-[100px] p-4">
+//               {testDrivesTable && testDrivesTable[status.title]?.length > 0 ? (
+//                 <div className="space-y-3">
+//                   {testDrivesTable[status.title].map(testDrive => (
+//                     <ManagementTestDriveCard key={testDrive.id} testDrive={testDrive} />
+//                   ))}
+//                 </div>
+//               ) : (
+//                 <div className="py-8 text-center text-gray-500">No test drives in this status</div>
+//               )}
+//             </div>
+//           </div> */}

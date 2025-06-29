@@ -1,5 +1,6 @@
 import type { DealType } from '@/types/deal/deal.type';
 import { Draggable, Droppable } from '@hello-pangea/dnd';
+import { Link } from '@tanstack/react-router';
 import type { KanbanColumn } from '../ManagementDeals';
 
 interface Props {
@@ -10,7 +11,7 @@ interface Props {
 }
 const DealColumn = ({ column, colIndex, colLength, deals }: Props) => {
   return (
-    <div className="flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm">
+    <div className="flex max-h-[90%] flex-col overflow-auto rounded-lg border border-gray-200 bg-white shadow-sm">
       <div className="flex items-center justify-between border-b border-gray-200 p-3">
         <h3 className="text-sm font-medium">{column.title}</h3>
         {colIndex < colLength - 1 && <span className="text-sm text-gray-400">→</span>}
@@ -42,6 +43,13 @@ const DealColumn = ({ column, colIndex, colLength, deals }: Props) => {
                           <p className="text-xs text-gray-500">Дата начала сделки: {formattedDate}</p>
                           <p className="mt-1 font-bold">{deal.price}</p>
                           <p className="mt-2 text-xs text-blue-600">{'Some Company ltd.'}</p>
+                          <Link
+                            to="/manager/deals/$id"
+                            params={{ id: deal.id }}
+                            className="text-blue-500 hover:underline"
+                          >
+                            Подробнее
+                          </Link>
                         </div>
                       )}
                     </Draggable>

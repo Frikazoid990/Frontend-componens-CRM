@@ -232,8 +232,6 @@ const ManagementDeals = () => {
     }
   };
   const updateDealAction = async (dealId: DealType['id'], dealStatusId: number) => {
-    debugger;
-
     try {
       const apiUrl = import.meta.env.VITE_API_URL + dealApiRoutes.updateDealWithStatus(dealId);
 

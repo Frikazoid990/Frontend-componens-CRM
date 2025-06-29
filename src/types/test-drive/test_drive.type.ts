@@ -11,3 +11,10 @@ export interface TestDriveType {
   client: Client;
   employee?: Employee | null;
 }
+
+export enum TestDriveStatus {
+  NotAssigned = 0,
+  InProgress = 1,
+  Completed = 2,
+  Canceled = 3,
+}

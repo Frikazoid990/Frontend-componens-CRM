@@ -1,5 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card';
 import type { TestDriveType } from '@/types/test-drive/test_drive.type';
+import { Link } from '@tanstack/react-router';
 
 interface Props {
   testDrive: TestDriveType;
@@ -32,6 +33,14 @@ const ManagementTestDriveCard = ({ testDrive }: Props) => {
             <span className="font-medium text-gray-700">Car:</span>
             <div className="mt-1 text-gray-900">{testDrive.car.model}</div>
           </div>
+
+          <Link
+            to={`/manager/deals/$id`}
+            params={{ id: testDrive.id }}
+            className="col-span-4 mt-2 inline-flex items-center text-blue-600 hover:underline"
+          >
+            Details
+          </Link>
         </div>
       </CardContent>
     </Card>
