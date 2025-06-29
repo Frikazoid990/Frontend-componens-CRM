@@ -62,4 +62,5 @@ export const messageApiRoutes = {
 
 export const managerApiRoutes = {
   getStaff: `/manager/get-staff`,
+  getStatsForCurrentManager: (managerId: string) => `/manager/get-stats/${managerId}`,
 };
