@@ -46,6 +46,8 @@ export const testDriveApiRoutes = {
   getTestDrivesForClient: (clientId: UUID) => `/test-drive/get-test-drives-for-client/${clientId}`,
 
   getTestDrive: (testDriveId: string) => `/test-drive/get-test-drive/${testDriveId}`,
+
+  getTestDrivesForManager: (managerId: string) => `/test-drive/get-test-drives-for-manager/${managerId}`,
 };
 
 export const statusApiRoutes = {
