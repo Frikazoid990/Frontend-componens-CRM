@@ -33,9 +33,10 @@ const ManagementTestDriveCard = ({ testDrive }: Props) => {
             <span className="font-medium text-gray-700">Car:</span>
             <div className="mt-1 text-gray-900">{testDrive.car.model}</div>
           </div>
-
+        </div>
+        <div className="flex w-full justify-end">
           <Link
-            to={`/manager/deals/$id`}
+            to={`/manager/test_drives/$id`}
             params={{ id: testDrive.id }}
             className="col-span-4 mt-2 inline-flex items-center text-blue-600 hover:underline"
           >

@@ -1,16 +1,13 @@
-import { Outlet } from '@tanstack/react-router'
-import MainHeader from './MainHeader/MainHeader'
+import { Outlet } from '@tanstack/react-router';
+import MainHeader from './MainHeader/MainHeader';
 
 const MainLayout = () => {
-	return (
+  return (
+    <div className="flex min-h-screen flex-col items-center">
+      <MainHeader />
+      <main className="min-h-full w-full flex-grow overflow-hidden">{<Outlet />}</main>
+    </div>
+  );
+};
 
-		<div className='flex min-h-screen flex-col items-center'>
-			<MainHeader />
-			<main className='min-h-[1000px] w-full flex-grow'>{<Outlet/>}</main>
-	
-		</div>
-
-	)
-}
-
-export default MainLayout
+export default MainLayout;

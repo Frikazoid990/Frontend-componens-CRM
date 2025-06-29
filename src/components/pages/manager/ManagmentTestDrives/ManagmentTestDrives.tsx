@@ -56,18 +56,22 @@ const ManagementTestDrives = () => {
     fetchManagerData();
   }, []);
 
+  useEffect(() => {
+    console.log('TD: ', testDrivesTable);
+  }, [testDrivesTable]);
+
   const handleCreateTestDrive = () => {
     // Placeholder for create test drive functionality
     console.log('Create Test Drive clicked');
   };
 
   const testDrivesStatusSections: StatusSection[] = [
-    { id: TestDriveStatus.NotAssigned, title: 'Not Assigned' },
-    { id: TestDriveStatus.InProgress, title: 'In Progress' },
+    { id: TestDriveStatus.NotAssigned, title: 'Менеджер не назначен' },
+    { id: TestDriveStatus.InProgress, title: 'В процессе' },
   ];
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-6 p-6">
+    <div className="mx-auto w-full max-w-[80%] space-y-6 p-6">
       {/* Header with Create Button */}
       <div className="flex justify-end">
         <Button onClick={handleCreateTestDrive} className="flex items-center gap-2">
@@ -86,7 +90,7 @@ const ManagementTestDrives = () => {
             </div>
 
             {/* Section Content */}
-            <div className="max-h-[400px] min-h-[200px] overflow-y-auto p-4">
+            <div className="max-h-[650px] min-h-[200px] overflow-y-auto p-4">
               {!!testDrivesTable && testDrivesTable[status.title]?.length > 0 ? (
                 <div className="space-y-3">
                   {testDrivesTable && testDrivesTable[status.title]?.length > 0 ? (
