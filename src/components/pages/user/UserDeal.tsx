@@ -75,7 +75,7 @@ const UserDeal = () => {
 const initialDeal: DealType = {
   id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
   createdAt: new Date('2023-05-15T10:00:00Z'),
-  isCanceled: false,
+  isCancelled: false,
   price: 45000,
   status: 'Completed',
   selectedConfiguration: 'Premium Package',
