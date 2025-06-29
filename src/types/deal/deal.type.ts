@@ -8,6 +8,7 @@ export interface DealType {
   id: UUID;
   createdAt: Date;
   isCancelled: boolean;
+  chatId: number;
   price: number;
   status: string;
   selectedConfiguration: string;
