@@ -1,6 +1,6 @@
 // src/hooks/useChatMessages.ts
 import * as signalR from '@microsoft/signalr';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSession } from './useSession';
 
 interface Message {
@@ -13,100 +13,41 @@ interface Message {
 interface UseChatReturn {
   messages: Message[];
   sendMessage: (content: string) => Promise<void>;
-  // joinChat: (chatId: number) => Promise<void>;
   isConnected: boolean;
   error: string | null;
 }
 
 export const useChat = (chatId: number | null): UseChatReturn => {
-  const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
+  const connectionRef = useRef<signalR.HubConnection | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const user = useSession();
+  const session = useSession();
+  const userId = session?.id;
 
+  // Initialize and manage the SignalR connection once
   useEffect(() => {
-    console.log('chatId', chatId);
-  }, [chatId]);
-
-  // Подключение к чату
-  const joinChat = useCallback(
-    async (chatId: number | null) => {
-      if (chatId === null) {
-        // setError('Connection is not allowed, need chatId');
-        // console.error('Connection is not allowed, need chatId');
-        return;
-      }
-      if (!connection) {
-        setError('Connection not established');
-        return;
-      }
-
-      try {
-        await connection.invoke('JoinToChat', chatId);
-      } catch (err) {
-        setError('Failed to join chat');
-        console.error('Join chat failed:', err);
-      }
-    },
-    [connection, chatId],
-  );
-
-  // Инициализация подключения
-  useEffect(() => {
-    const newConnection = new signalR.HubConnectionBuilder()
-      .withUrl(
-        import.meta.env.VITE_API_URL + '/chat',
-        //   {
-        //   // Добавьте токен авторизации, если требуется
-        //   accessTokenFactory: () => localStorage.getItem('token') || '',
-        // }
-      )
-
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl(`${import.meta.env.VITE_API_URL}/chat`)
       .withAutomaticReconnect()
+      // .configureLogging(signalR.LogLevel.Warn)
       .build();
 
-    setConnection(newConnection);
+    connectionRef.current = connection;
 
-    return () => {
-      newConnection.stop();
-    };
-  }, []);
+    // Start connection
+    connection
+      .start()
+      .then(() => setIsConnected(true))
+      .catch(() => setError('Failed to connect to chat'));
 
-  // Подписка на события
-  useEffect(() => {
-    if (!connection) return;
-
-    const startConnection = async () => {
-      try {
-        await connection.start();
-        setIsConnected(true);
-        setError(null);
-
-        joinChat(chatId);
-      } catch (err) {
-        setError('Failed to connect to chat');
-        console.error('Connection failed:', err);
-      }
-    };
-
-    startConnection();
-
-    connection.on('ReceiveMessage', (message: Message) => {
-      setMessages(prev => [...prev, message]);
+    // Register handlers
+    connection.on('ReceiveMessage', (msg: Message) => {
+      setMessages(prev => [...prev, msg]);
     });
 
     connection.on('ReceiveMessageHistory', (history: Message[]) => {
       setMessages(history);
-    });
-
-    // connection.on('UserJoined', (userId: string) => {
-    //   // Можно добавить уведомление о новом пользователе
-    //   console.log(`User ${userId} joined the chat`);
-    // });
-
-    connection.onclose(() => {
-      setIsConnected(false);
     });
 
     connection.onreconnecting(() => {
@@ -115,71 +56,57 @@ export const useChat = (chatId: number | null): UseChatReturn => {
 
     connection.onreconnected(() => {
       setIsConnected(true);
+      // Rejoin room if needed
+      if (chatId !== null) {
+        connection.invoke('JoinToChat', chatId).catch(() => {
+          setError('Failed to rejoin chat');
+        });
+      }
+    });
+
+    connection.onclose(() => {
+      setIsConnected(false);
     });
 
     return () => {
+      // Cleanup handlers and stop connection
       connection.off('ReceiveMessage');
       connection.off('ReceiveMessageHistory');
-      // connection.off('UserJoined');
+      connection.stop();
     };
-  }, [connection, chatId]);
+  }, [chatId]);
 
-  // Отправка сообщения
+  // Join chat room on chatId change
+  useEffect(() => {
+    const connection = connectionRef.current;
+    if (!connection || !isConnected || chatId === null) return;
+
+    connection.invoke('JoinToChat', chatId).catch(() => setError('Failed to join chat'));
+  }, [chatId, isConnected]);
+
+  /**
+   * Send a message to the current chat room.
+   * @param content - The text content of the message.
+   */
   const sendMessage = useCallback(
     async (content: string) => {
-      if (!connection || !isConnected) {
+      if (!connectionRef.current || !isConnected) {
         setError('Not connected to chat');
+        return;
+      }
+      if (chatId === null || !userId) {
+        setError('Invalid chat or user session');
         return;
       }
 
       try {
-        await connection.invoke('SendMessage', chatId, content, user?.id);
-      } catch (err) {
+        await connectionRef.current.invoke('SendMessage', chatId, content, userId);
+      } catch {
         setError('Failed to send message');
-        console.error('Send message failed:', err);
       }
     },
-    [connection, isConnected],
+    [chatId, isConnected, userId],
   );
 
-  return {
-    messages,
-    sendMessage,
-    // joinChat,
-    isConnected,
-    error,
-  };
+  return { messages, sendMessage, isConnected, error };
 };
-// export const useChatMessages = ({ chatId }: UseChatMessagesProps) => {
-
-//   const [messages, setMessages] = useState<UserMessageType[]>([])
-
-//   useEffect(() => {
-//     const setupSignalR = async () => {
-//       if (chatConnection.state === signalR.HubConnectionState.Disconnected) {
-//         await chatConnection.start();
-//       }
-
-//       await joinChatGroup(chatId);
-
-//       chatConnection.on('ReceiveMessage', (message: string) => {
-//         onMessageReceived(message);
-//       });
-//     };
-
-//     setupSignalR();
-
-//     return () => {
-//       chatConnection.off('ReceiveMessage');
-//     };
-//   }, [chatId, onMessageReceived]);
-
-//   const onSendMessage = (sendedMessage: string) =>{
-
-//     setMessages(prev => [...prev, sendedMessage])
-//   }
-
-//   return {
-//     messages, onSendMessage
-//   }
-// };
