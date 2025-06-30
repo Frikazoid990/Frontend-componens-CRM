@@ -38,7 +38,10 @@ export const useChat = (chatId: number | null): UseChatReturn => {
     // Start connection
     connection
       .start()
-      .then(() => setIsConnected(true))
+      .then(() => {
+        setError(null);
+        setIsConnected(true);
+      })
       .catch(() => setError('Failed to connect to chat'));
 
     // Register handlers
