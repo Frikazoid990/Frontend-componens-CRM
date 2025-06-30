@@ -60,21 +60,26 @@ const Reporting = () => {
 
     setIsLoading(true);
 
+    const dates = {
+      dateStart: new Date(formData.startDate),
+      dateEnd: new Date(formData.endDate),
+    };
+
     try {
       if (formData.selectedReportType === 'conversion-funnel') {
-        const report = await fetchSalesFunnelReport(user, token);
+        const report = await fetchSalesFunnelReport(user, token, dates);
         if (report.error) {
           throw new Error(report.error);
         }
         setFunnelReportData(report.data || []);
       } else if (formData.selectedReportType === 'manager') {
-        const report = await fetchManagerPerformanceReport(user, token);
+        const report = await fetchManagerPerformanceReport(user, token, dates);
         if (report.error) {
           throw new Error(report.error);
         }
         setManagerPerformanceReportData(report.data || []);
       } else if (formData.selectedReportType === 'overall-sales') {
-        const report = await fetchOverallSalesReport(user, token);
+        const report = await fetchOverallSalesReport(user, token, dates);
         if (report.error) {
           throw new Error(report.error);
         }
