@@ -106,8 +106,6 @@ const Deal = () => {
       setCurrentOffer(deal?.price ?? null);
       setOriginalPrice(deal?.price ?? null);
       setIsCanceled(!!deal?.isCancelled);
-      console.log(deal);
-      console.log('isCanceled state:', isCanceled);
     });
     fetchStaff(user, token).then(staff => {
       setStaff(staff);
