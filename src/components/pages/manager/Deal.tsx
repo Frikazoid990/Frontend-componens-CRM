@@ -293,7 +293,7 @@ const Deal = () => {
         {/* Chat Section */}
         <div className="w-80">
           <div className="h-full">
-            <ChatSection />
+            <ChatSection chatId={deal?.chatId ?? null} />
           </div>
         </div>
       </div>

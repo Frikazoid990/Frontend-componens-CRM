@@ -9,6 +9,7 @@ import type {
 export const fetchManagerPerformanceReport = async (
   user: SessionType | null,
   token: string | null,
+  start,
 ): Promise<{
   data?: TManagerPerformanceReport;
   error?: string;
@@ -23,6 +24,7 @@ export const fetchManagerPerformanceReport = async (
       method: 'GET',
       credentials: 'include',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });
@@ -56,6 +58,7 @@ export const fetchOverallSalesReport = async (
       method: 'GET',
       credentials: 'include',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });
@@ -89,6 +92,7 @@ export const fetchSalesFunnelReport = async (
       method: 'GET',
       credentials: 'include',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });

@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { startChatConnection } from '@/hooks/signalrClient';
 import { Send } from 'lucide-react';
 
 interface Message {
@@ -12,7 +11,7 @@ interface Message {
 }
 
 interface ChatProps {
-  chatId: number;
+  chatId: number | null;
 }
 
 export function ChatSection({ chatId }: ChatProps) {
@@ -31,8 +30,7 @@ export function ChatSection({ chatId }: ChatProps) {
     },
   ];
 
-  startChatConnection();
-
+  // useChatMessages({ chatId, onMessageReceived: handleNewMessage });
   return (
     <Card className="flex h-full flex-col">
       <CardHeader>
