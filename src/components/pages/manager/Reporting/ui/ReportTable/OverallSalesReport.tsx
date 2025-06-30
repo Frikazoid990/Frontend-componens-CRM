@@ -1,4 +1,3 @@
-import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { TCarSalesReport } from '@/types/manager/reports/reposrts.type';
 
@@ -30,11 +29,10 @@ const OverallSalesReport = ({ reportData }: Props) => {
       <TableHeader>
         <TableRow>
           <TableHead>Модель</TableHead>
-          <TableHead>Категория</TableHead>
+
           <TableHead>Продано единиц</TableHead>
           <TableHead>Средняя цена</TableHead>
           <TableHead>Общая выручка</TableHead>
-          <TableHead>Маржа</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -43,11 +41,8 @@ const OverallSalesReport = ({ reportData }: Props) => {
             <TableCell className="font-medium">{row.modelBrand}</TableCell>
 
             <TableCell>{row.unitsSold}</TableCell>
-            <TableCell>{row.avgPrice}</TableCell>
+            <TableCell>{row.avgPrice.toFixed(2)}</TableCell>
             <TableCell className="font-medium">{row.totalRevenue}</TableCell>
-            <TableCell>
-              <Badge variant={Number.parseFloat(row.margin) > 15 ? 'default' : 'secondary'}>{row.margin}</Badge>
-            </TableCell>
           </TableRow>
         ))}
       </TableBody>

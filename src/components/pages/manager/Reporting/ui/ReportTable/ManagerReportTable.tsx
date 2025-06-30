@@ -25,6 +25,7 @@ const ManagerReportTable = ({ reportData }: Props) => {
 
   //   fetchManagerReport();
   // }, []);
+
   return (
     <Table>
       <TableHeader>
@@ -38,20 +39,24 @@ const ManagerReportTable = ({ reportData }: Props) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {reportData.map(row => (
-          <TableRow key={row.id}>
-            <TableCell className="font-medium">{row.managerFullName}</TableCell>
-            <TableCell>{row.testDrives}</TableCell>
-            <TableCell>{row.dealsRegistered}</TableCell>
-            <TableCell>{row.dealsCompleted}</TableCell>
-            <TableCell>
-              <Badge variant={Number.parseFloat(row.conversionRate) > 30 ? 'default' : 'secondary'}>
-                {row.conversionRate}
-              </Badge>
-            </TableCell>
-            <TableCell className="font-medium">{row.revenue}</TableCell>
-          </TableRow>
-        ))}
+        {reportData.map((row, index) => {
+          console.log('row - ' + index, row);
+
+          const formattedConversionToInt = Number.parseInt(row.conversionRate.split(',')[0]);
+
+          return (
+            <TableRow key={row.id}>
+              <TableCell className="font-medium">{row.managerFullName}</TableCell>
+              <TableCell>{row.testDrives}</TableCell>
+              <TableCell>{row.dealsRegistered}</TableCell>
+              <TableCell>{row.dealsCompleted}</TableCell>
+              <TableCell>
+                <Badge variant={formattedConversionToInt > 30 ? 'default' : 'secondary'}>{row.conversionRate}</Badge>
+              </TableCell>
+              <TableCell className="font-medium">{row.revenue}</TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );

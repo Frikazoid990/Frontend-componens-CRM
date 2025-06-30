@@ -13,7 +13,6 @@ export interface ICarSalesReport {
   unitsSold: number;
   avgPrice: number;
   totalRevenue: number;
-  margin: string;
 }
 
 export interface IManagerPerformanceReport {

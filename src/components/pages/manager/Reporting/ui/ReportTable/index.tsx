@@ -5,12 +5,13 @@ import type {
   TManagerPerformanceReport,
   TSalesFunnelReport,
 } from '@/types/manager/reports/reposrts.type';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@radix-ui/react-dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import { saveAs } from 'file-saver';
 import { Download, FileSpreadsheet, FileTextIcon } from 'lucide-react';
 import * as XLSX from 'xlsx';
@@ -100,6 +101,7 @@ const ReportTable = ({ formData, funnelReportData, managerReportData, overallSal
               Сформировано {new Date().toLocaleDateString('ru-RU')} в {new Date().toLocaleTimeString('ru-RU')}
             </CardDescription>
           </div>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">

@@ -7,12 +7,16 @@ interface Props {
   managerReportData: TManagerPerformanceReport;
 }
 const ManagerPerformanceChart = ({ managerReportData }: Props) => {
-  const managerChartData = managerReportData.map(row => ({
-    name: row.managerFullName,
-    testDrives: row.testDrives,
-    dealsCompleted: row.dealsCompleted,
-    conversionRate: Number.parseFloat(row.conversionRate.replace('%', '')),
-  }));
+  const managerChartData = managerReportData.map(row => {
+    const nameParts = row.managerFullName.split(' ');
+    const formattedName = `${nameParts[0]}${nameParts[1] ? ` ${nameParts[1].slice(0, 1)}.` : ''}${nameParts[2] ? ` ${nameParts[2].slice(0, 1)}.` : ''}`;
+    return {
+      name: formattedName,
+      testDrives: row.testDrives,
+      dealsCompleted: row.dealsCompleted,
+      conversionRate: Number.parseInt(row.conversionRate.split(',')[0]),
+    };
+  });
 
   return (
     <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">

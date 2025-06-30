@@ -11,8 +11,8 @@ const OverallSalesChart = ({ overallSalesReportData }: Props) => {
   const salesChartData = overallSalesReportData.map(row => ({
     name: row.modelBrand,
     unitsSold: row.unitsSold,
-    revenue: row.totalRevenue + ' руб',
-    margin: row.margin + ' %',
+    avgPrice: row.avgPrice,
+    revenue: row.totalRevenue,
   }));
 
   return (
