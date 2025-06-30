@@ -9,7 +9,10 @@ import type {
 export const fetchManagerPerformanceReport = async (
   user: SessionType | null,
   token: string | null,
-  start,
+  dates: {
+    dateStart: Date;
+    dateEnd: Date;
+  },
 ): Promise<{
   data?: TManagerPerformanceReport;
   error?: string;
@@ -20,13 +23,15 @@ export const fetchManagerPerformanceReport = async (
     }
 
     const url = import.meta.env.VITE_API_URL + reportsApiRoutes.getManagerReport;
+    const body = JSON.stringify(dates);
     const response = await fetch(url, {
-      method: 'GET',
+      method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
+      body: body,
     });
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -44,6 +49,10 @@ export const fetchManagerPerformanceReport = async (
 export const fetchOverallSalesReport = async (
   user: SessionType | null,
   token: string | null,
+  dates: {
+    dateStart: Date;
+    dateEnd: Date;
+  },
 ): Promise<{
   data?: TCarSalesReport;
   error?: string;
@@ -54,13 +63,15 @@ export const fetchOverallSalesReport = async (
     }
 
     const url = import.meta.env.VITE_API_URL + reportsApiRoutes.getCarReport;
+    const body = JSON.stringify(dates);
     const response = await fetch(url, {
-      method: 'GET',
+      method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
+      body: body,
     });
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -78,6 +89,10 @@ export const fetchOverallSalesReport = async (
 export const fetchSalesFunnelReport = async (
   user: SessionType | null,
   token: string | null,
+  dates: {
+    dateStart: Date;
+    dateEnd: Date;
+  },
 ): Promise<{
   data?: TSalesFunnelReport;
   error?: string;
@@ -88,13 +103,15 @@ export const fetchSalesFunnelReport = async (
     }
 
     const url = import.meta.env.VITE_API_URL + reportsApiRoutes.getFunnelReport;
+    const body = JSON.stringify(dates);
     const response = await fetch(url, {
-      method: 'GET',
+      method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
+      body: body,
     });
     if (!response.ok) {
       throw new Error('Network response was not ok');
