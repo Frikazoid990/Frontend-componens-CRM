@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { chatConnection, joinChatGroup } from './signalrClient';
 
 interface UseChatMessagesProps {
-  chatId: number;
+  chatId: number | null;
   onMessageReceived: (message: string) => void;
 }
 

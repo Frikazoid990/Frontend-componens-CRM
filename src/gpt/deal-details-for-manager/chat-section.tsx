@@ -1,7 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { useChatMessages } from '@/hooks/useChatMessages';
+import { useSession } from '@/hooks/useSession';
 import { Send } from 'lucide-react';
+import { useState } from 'react';
 
 interface Message {
   id: number;
@@ -15,22 +18,26 @@ interface ChatProps {
 }
 
 export function ChatSection({ chatId }: ChatProps) {
-  const messages: Message[] = [
-    {
-      id: 3,
-      sender: 'Клиент:',
-      text: 'Можно уточнить условия покупки в кредит? ',
-      timestamp: '10:28',
-    },
-    {
-      id: 4,
-      sender: 'Вы:',
-      text: 'Мы предлагаем выгодные условия кредитования — ставка от 4.9%, первый взнос от 15%.',
-      timestamp: '10:30',
-    },
-  ];
+  const user = useSession();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputValue, setInputValue] = useState('');
 
-  // useChatMessages({ chatId, onMessageReceived: handleNewMessage });
+  const handleNewMessage = (message: string) => {
+    const now = new Date();
+    const timeString = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+    setMessages(prev => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        sender: user?. ? 'Вы:' : 'Клиент:',
+        text: message,
+        timestamp: timeString,
+      },
+    ]);
+  };
+
+  useChatMessages({ chatId, onMessageReceived: handleNewMessage });
   return (
     <Card className="flex h-full flex-col">
       <CardHeader>
