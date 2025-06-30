@@ -63,7 +63,8 @@ const userMenuList = [
 ];
 
 const managerMenuList = [
-  { title: 'Dashboard', path: '/dashboard' },
-  { title: 'Settings', path: '/settings' },
-  { title: 'Users', path: '/users' },
+  { title: 'Рабочий стол', path: '/manager/dashboard' },
+  { title: 'Сделки', path: '/manager/deals' },
+  { title: 'Тест-драйв', path: '/manager/test_drives' },
+  { title: 'Отчеты', path: '/manager/reporting' },
 ];

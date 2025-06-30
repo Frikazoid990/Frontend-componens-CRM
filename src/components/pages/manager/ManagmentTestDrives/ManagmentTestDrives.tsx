@@ -86,7 +86,7 @@ const ManagementTestDrives = () => {
           <div key={status.id} className="rounded-lg border border-gray-300">
             {/* Section Header */}
             <div className="border-b border-gray-300 bg-gray-50 px-4 py-3">
-              <h2 className="text-lg font-semibold text-gray-800">{status.title} Test Drives:</h2>
+              <h2 className="text-lg font-semibold text-gray-800">{status.title}:</h2>
             </div>
 
             {/* Section Content */}

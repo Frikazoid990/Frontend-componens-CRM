@@ -31,7 +31,7 @@ const TestDriveDetailsCard = () => {
     setIsPending(true);
     const statusId: number | null = statuses.find(s => s.label === testDrive?.status)?.value ?? null;
     if (statusId) {
-      fetchUpdateStatus(statusId).finally(() => setIsPending(false));
+      fetchUpdateStatus(statusId, token).finally(() => setIsPending(false));
     } else {
       setIsPending(false);
     }

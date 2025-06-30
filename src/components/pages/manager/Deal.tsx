@@ -1,10 +1,14 @@
+import { fetchUpdateEmployeeDeal } from '@/actions/deal.action';
+import { fetchStaff } from '@/actions/staff.action';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { dealApiRoutes } from '@/constants/routes';
 import { ChatSection } from '@/gpt/deal-details-for-manager/chat-section';
 import { useSession } from '@/hooks/useSession';
 import { useToken } from '@/hooks/useToken';
+import type { Employee } from '@/types/Common types/employee.type';
 import type { DealType } from '@/types/deal/deal.type';
 import { Edit, IterationCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -15,8 +19,10 @@ const Deal = () => {
   const [isEditingPrice, setIsEditingPrice] = useState<boolean>(false);
   const [currentOffer, setCurrentOffer] = useState<number | null>(0);
   const [deal, setDeal] = useState<DealType | null>(null);
+  const [staff, setStaff] = useState<Employee[]>([]);
   const [originalPrice, setOriginalPrice] = useState<number | null>(null);
   const [isCanceled, setIsCanceled] = useState<boolean | null>();
+  const isDisabledManagerSelect = deal?.status === 'Менеджер не назначен' ? false : true;
 
   const fetchDealForManager = async (): Promise<DealType | null> => {
     try {
@@ -37,6 +43,7 @@ const Deal = () => {
         throw new Error('Network response was not ok');
       }
       const deal: DealType = await response.json();
+      console.log('fetch deal:', deal);
       return deal;
     } catch (error) {
       console.log(error);
@@ -93,7 +100,19 @@ const Deal = () => {
       console.log(error);
     }
   };
-
+  useEffect(() => {
+    fetchDealForManager().then(deal => {
+      setDeal(deal);
+      setCurrentOffer(deal?.price ?? null);
+      setOriginalPrice(deal?.price ?? null);
+      setIsCanceled(!!deal?.isCancelled);
+      console.log(deal);
+      console.log('isCanceled state:', isCanceled);
+    });
+    fetchStaff(user, token).then(staff => {
+      setStaff(staff);
+    });
+  }, []);
   const handleEditPrice = () => {
     setIsEditingPrice(true);
   };
@@ -118,16 +137,9 @@ const Deal = () => {
     }
   };
 
-  useEffect(() => {
-    fetchDealForManager().then(deal => {
-      setDeal(deal);
-      setCurrentOffer(deal?.price ?? null);
-      setOriginalPrice(deal?.price ?? null);
-      setIsCanceled(!!deal?.isCancelled);
-      console.log(deal);
-      console.log('isCanceled state:', isCanceled);
-    });
-  }, []);
+  const handleSaveEmployee = () => {
+    fetchUpdateEmployeeDeal(deal?.employee?.id ?? null, token);
+  };
 
   return (
     <div className="flex flex-1 p-4">
@@ -201,6 +213,33 @@ const Deal = () => {
                       </div>
                     )}
                   </div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium">Ответственный менеджер:</p>
+                    <Select
+                      value={deal?.employee?.fullName || ''}
+                      onValueChange={fullName => {
+                        const selectedEmployee: Employee | undefined = staff.find(emp => emp.fullName === fullName);
+
+                        setDeal(prev => {
+                          const updatedState: DealType | null = prev ? { ...prev, employee: selectedEmployee } : null;
+
+                          return updatedState;
+                        });
+                      }}
+                      disabled={isDisabledManagerSelect}
+                    >
+                      <SelectTrigger className="w-[300px]">
+                        <SelectValue placeholder="Выберите менеджера" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {staff.map(employee => (
+                          <SelectItem key={employee.id} value={employee.fullName}>
+                            {employee.fullName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
                   {/* Информация о клиенте */}
                   <p className="font-medium">Информация о клиенте:</p>
@@ -211,16 +250,8 @@ const Deal = () => {
                     <span className="font-medium">Телефонный номер:</span> {deal.client.phoneNumber}
                   </p>
 
-                  {/* Менеджер (если назначен) */}
-                  {deal.employee && (
-                    <>
-                      <p>
-                        <span className="font-medium">Менеджер:</span> {deal.employee.fullName}
-                      </p>
-                    </>
-                  )}
-
                   {/* Кнопки управления */}
+
                   {isCanceled ? (
                     <div className="mt-4">
                       <a
@@ -244,6 +275,15 @@ const Deal = () => {
                       >
                         Отмена
                       </Button>
+                      {!isDisabledManagerSelect && (
+                        <Button
+                          variant="outline"
+                          className="hover:text-destructive-foreground bg-green-400 transition-colors hover:bg-[#a2eea8]"
+                          onClick={handleSaveEmployee}
+                        >
+                          Установить сотрудника
+                        </Button>
+                      )}
                     </div>
                   )}
                 </div>

@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { useChatMessages } from '@/hooks/useChatMessages';
+import { useChat } from '@/hooks/useChatMessages';
 import { useSession } from '@/hooks/useSession';
 import { Send } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Message {
   id: number;
@@ -18,26 +18,17 @@ interface ChatProps {
 }
 
 export function ChatSection({ chatId }: ChatProps) {
+  const [innerChatId, setInnerChatId] = useState(chatId);
   const user = useSession();
-  const [messages, setMessages] = useState<Message[]>([]);
+
+  useEffect(() => {
+    setInnerChatId(chatId);
+  }, [chatId]);
+
   const [inputValue, setInputValue] = useState('');
+  const { messages, isConnected, error, sendMessage } = useChat(innerChatId);
 
-  const handleNewMessage = (message: string) => {
-    const now = new Date();
-    const timeString = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
-
-    setMessages(prev => [
-      ...prev,
-      {
-        id: prev.length + 1,
-        sender: user?. ? 'Вы:' : 'Клиент:',
-        text: message,
-        timestamp: timeString,
-      },
-    ]);
-  };
-
-  useChatMessages({ chatId, onMessageReceived: handleNewMessage });
+  // useChatMessages({ chatId, onMessageReceived: handleNewMessage });
   return (
     <Card className="flex h-full flex-col">
       <CardHeader>
@@ -52,19 +43,35 @@ export function ChatSection({ chatId }: ChatProps) {
                   message.sender === 'Вы:' ? 'bg-blue-100 text-blue-900' : 'bg-gray-100 text-gray-900'
                 }`}
               >
-                <p className="text-sm">{message.text}</p>
+                <p className="text-sm">{message.content}</p>
               </div>
-              <p className="mt-1 text-xs text-gray-500">{message.timestamp}</p>
+              <p className="mt-1 text-xs text-gray-500">{new Date(message.createdAt).toLocaleTimeString()}</p>
             </div>
           ))}
         </div>
         <div className="mt-4 flex items-center space-x-2">
-          <Input placeholder="Ваше сообщение..." className="flex-1" />
-          <Button size="icon">
+          <Input
+            placeholder="Ваше сообщение..."
+            className="flex-1"
+            value={inputValue}
+            onChange={e => setInputValue(e.target.value)}
+          />
+          <Button
+            size="icon"
+            onClick={() => {
+              sendMessage(inputValue);
+              setInputValue('');
+            }}
+          >
             <Send className="h-4 w-4" />
           </Button>
         </div>
       </CardContent>
+      <CardFooter>
+        {error && (
+          <p className="rounded-md bg-[#fcc5c5] px-3 py-1 text-red-900 shadow-sm outline outline-slate-100">{error}</p>
+        )}
+      </CardFooter>
     </Card>
   );
 }

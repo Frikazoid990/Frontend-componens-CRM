@@ -39,10 +39,10 @@ const DealColumn = ({ column, colIndex, colLength, deals }: Props) => {
                           className="cursor-grab rounded-md border border-gray-300 bg-white p-3 text-sm shadow-sm active:cursor-grabbing"
                         >
                           <p className="font-semibold">{deal.client.fullName}</p>
-                          <p className="text-gray-700">{deal.car.model}</p>
+                          <p className="text-gray-700">{deal.car.brand + ' ' + deal.car.model}</p>
                           <p className="text-xs text-gray-500">Дата начала сделки: {formattedDate}</p>
-                          <p className="mt-1 font-bold">{deal.price}</p>
-                          <p className="mt-2 text-xs text-blue-600">{'Some Company ltd.'}</p>
+                          <p className="mt-1 font-bold">{deal.price} (RUB)</p>
+                          <p className="mt-2 text-xs text-blue-600">{'Автоцентр XXI'}</p>
                           <div className="flex w-full justify-end">
                             <Link
                               to="/manager/deals/$id"

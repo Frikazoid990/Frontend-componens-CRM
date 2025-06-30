@@ -69,8 +69,8 @@ const AuthPage = () => {
         setError('Неверный номер телефона или пароль');
         return;
       }
-
-      navigate({ to: '/' });
+      if (user?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] == 'CLIENT') navigate({ to: '/' });
+      else navigate({ to: '/manager/dashboard' });
     } catch (error) {
       console.error(error instanceof Error ? error.message : 'Unknown error occurred');
       setError('Произошла ошибка. Попробуйте позже.');
@@ -101,7 +101,8 @@ const AuthPage = () => {
 
       const createdUserId: UUID = await response.json();
       if (createdUserId) {
-        navigate({ to: '/' });
+        if (user?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] == 'CLIENT') navigate({ to: '/' });
+        else navigate({ to: '/manager/dashboard' });
       }
     } catch (error) {
       console.error(error instanceof Error ? error.message : 'Unknown error occurred');

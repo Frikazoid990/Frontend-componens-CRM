@@ -3,12 +3,14 @@ import { ChatSection } from '@/gpt/deal-details-for-manager/chat-section';
 import { CarInfoCard } from '@/gpt/personal-ofice-deal-info-components/car-info-card';
 import { DealDetailsCard } from '@/gpt/personal-ofice-deal-info-components/deal-details-card';
 import { useSession } from '@/hooks/useSession';
+import { useToken } from '@/hooks/useToken';
 import type { DealType } from '@/types/deal/deal.type';
 import { useEffect, useState } from 'react';
 
 const UserDeal = () => {
-  const [deal, setDeal] = useState<DealType | null>(initialDeal);
+  const [deal, setDeal] = useState<DealType | null>(null);
   const user = useSession();
+  const token = useToken();
 
   const fetchDeal = async (): Promise<DealType | null> => {
     try {
@@ -19,6 +21,10 @@ const UserDeal = () => {
       const response = await fetch(import.meta.env.VITE_API_URL + dealApiRoutes.getDealForClient(user.id), {
         method: 'GET',
         credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
       });
       const deal: DealType = await response.json();
       if (!response.ok) {
@@ -62,7 +68,7 @@ const UserDeal = () => {
             </div>
           </div>
           <div className="col-span-1">
-            <ChatSection />
+            <ChatSection chatId={deal.chatId} />
           </div>
         </div>
       ) : (
@@ -72,37 +78,37 @@ const UserDeal = () => {
   );
 };
 
-const initialDeal: DealType = {
-  id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
-  createdAt: new Date('2023-05-15T10:00:00Z'),
-  isCancelled: false,
-  price: 45000,
-  status: 'Completed',
-  selectedConfiguration: 'Premium Package',
-  selectedOptions: {
-    engine: ['V6 3.0L'],
-    color: [
-      {
-        name: '',
-        hex: '',
-      },
-    ],
-  },
-  car: {
-    id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
-    model: 'Camry',
-    brand: 'Toyota',
-    imgPath: '/focusrs.jpg',
-  },
-  client: {
-    id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
-    fullName: 'John Smith',
-    phoneNumber: '+1234567890',
-  },
-  employee: {
-    id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
-    fullName: 'Alice Johnson',
-  },
-};
+// const initialDeal: DealType = {
+//   id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
+//   createdAt: new Date('2023-05-15T10:00:00Z'),
+//   isCancelled: false,
+//   price: 45000,
+//   status: 'Completed',
+//   selectedConfiguration: 'Premium Package',
+//   selectedOptions: {
+//     engine: ['V6 3.0L'],
+//     color: [
+//       {
+//         name: '',
+//         hex: '',
+//       },
+//     ],
+//   },
+//   car: {
+//     id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
+//     model: 'Camry',
+//     brand: 'Toyota',
+//     imgPath: '/focusrs.jpg',
+//   },
+//   client: {
+//     id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
+//     fullName: 'John Smith',
+//     phoneNumber: '+1234567890',
+//   },
+//   employee: {
+//     id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
+//     fullName: 'Alice Johnson',
+//   },
+// };
 
 export default UserDeal;

@@ -41,6 +41,7 @@ const UserPlaque = ({ user }: Props) => {
     }
   };
   const navigate = useNavigate();
+  const isManager = user?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] !== 'CLIENT';
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className={cn('flex items-center gap-2 rounded-3xl bg-black px-4 py-2 hover:bg-[#4e4d4d]')}>
@@ -64,6 +65,16 @@ const UserPlaque = ({ user }: Props) => {
         {/* <DropdownMenuItem asChild>
 					<Link href={DEFAULT_LOGIN_REDIRECT}>Profile</Link>
 				</DropdownMenuItem> */}
+
+        {isManager && (
+          <DropdownMenuItem
+            onClick={() => {
+              navigate({ to: '/manager/dashboard' });
+            }}
+          >
+            CRM
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem
           onClick={() => {
             logOutHandler();

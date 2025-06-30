@@ -64,7 +64,7 @@ export const createTestDriveAction = async (request: Omit<TestDriveTypeOut, 'id'
   }
 };
 
-export const fetchUpdateStatus = async (request: number): Promise<void> => {
+export const fetchUpdateStatus = async (request: number, token: string | null): Promise<void> => {
   try {
     const requestBody = JSON.stringify(request);
     const url = window.location.href;
@@ -76,6 +76,7 @@ export const fetchUpdateStatus = async (request: number): Promise<void> => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: requestBody,
       },
