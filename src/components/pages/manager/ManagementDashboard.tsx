@@ -2,19 +2,9 @@ import { managerApiRoutes } from '@/constants/routes';
 import { useSession } from '@/hooks/useSession';
 import { useToken } from '@/hooks/useToken';
 import type { ManagerStatsType } from '@/types/manager/manager.stats.type';
+import { useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 const ManagementDashboard = () => {
   const [stats, setStats] = useState<ManagerStatsType | null>(null);
@@ -46,14 +36,15 @@ const ManagementDashboard = () => {
       return null;
     }
   };
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchManagerStats().then(data => setStats(data));
+    if (user?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'CLIENT') navigate({ to: '/' });
   }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <h1 className="mb-6 text-2xl font-bold text-gray-800">Last Statistics:</h1>
+      <h1 className="mb-6 text-2xl font-bold text-gray-800">Месячная статистика:</h1>
 
       {/* Statistics Cards */}
       <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -68,10 +59,6 @@ const ManagementDashboard = () => {
         <div className="rounded-lg border-2 border-gray-300 bg-white p-4">
           <div className="mb-1 text-sm text-gray-600">Общая сумма продаж за месяц</div>
           <div className="text-3xl font-bold text-yellow-500">{stats?.totalPrice}</div>
-        </div>
-        <div className="rounded-lg border-2 border-gray-300 bg-white p-4">
-          <div className="mb-1 text-sm text-gray-600">Some Statistic:</div>
-          <div className="text-3xl font-bold text-green-500">555</div>
         </div>
       </div>
 
@@ -126,35 +113,6 @@ const ManagementDashboard = () => {
               <span className="text-sm text-gray-600">Тест-драйвы</span>
             </div>
           </div>
-        </div>
-
-        {/* Pie Charts */}
-        <div className="space-y-6">
-          {[1, 2, 3].map(index => (
-            <div key={index} className="rounded-lg bg-white p-4">
-              <ResponsiveContainer width="100%" height={120}>
-                <PieChart>
-                  <Pie
-                    data={[
-                      { name: 'Section 1', value: 60, color: '#60a5fa' },
-                      { name: 'Section 2', value: 40, color: '#374151' },
-                    ]}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={0}
-                    outerRadius={40}
-                    paddingAngle={2}
-                    dataKey="value"
-                    label={({ value }) => `${value}%`}
-                    labelLine={false}
-                  >
-                    <Cell fill="#60a5fa" />
-                    <Cell fill="#374151" />
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          ))}
         </div>
       </div>
     </div>

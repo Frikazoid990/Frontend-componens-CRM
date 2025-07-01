@@ -78,7 +78,7 @@ export function CarCard({ car }: CarCardProps) {
       planedDate: planedDate.toISOString(), // Replace with actual planned date
     };
 
-    createTestDriveAction(request);
+    createTestDriveAction(request, token);
   };
 
   return (

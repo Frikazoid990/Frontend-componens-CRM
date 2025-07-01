@@ -4,20 +4,41 @@ import { Link, useLocation } from '@tanstack/react-router';
 import HeaderOutline from './ui/HeaderOutline';
 import LoginLabel from './ui/LoginLabel';
 
+type MenuItem = {
+  title: string;
+  path: string;
+};
+
+const userMenuList: MenuItem[] = [
+  { title: 'Каталог автомобилей', path: '/' },
+  { title: 'Личный кабинет клиента', path: '/personal_office' },
+];
+
+const allManagerMenuList: MenuItem[] = [
+  { title: 'Рабочий стол', path: '/manager/dashboard' },
+  { title: 'Сделки', path: '/manager/deals' },
+  { title: 'Тест-драйв', path: '/manager/test_drives' },
+  { title: 'Отчеты', path: '/manager/reporting' },
+];
+
 const MainHeader = () => {
   const currentPath = useLocation();
-  console.log('Current path:', currentPath);
   const user = useSession();
-
-  const managerRoles = [`ADMIN`, `MANAGER`, `SENIORMANAGER`, `DIRECTOR`];
-
+  const role = user?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? 'CLIENT';
   const isManagerRoute = currentPath.pathname.startsWith('/manager');
 
-  const menu =
-    managerRoles.includes(user?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? 'CLIENT') &&
-    isManagerRoute
-      ? managerMenuList
-      : userMenuList;
+  const managerRoles = ['ADMIN', 'MANAGER', 'SENIORMANAGER', 'DIRECTOR'];
+
+  // Теперь фильтруем меню внутри компонента — можно использовать хуки!
+  const filteredManagerMenu = allManagerMenuList.filter(section => {
+    if (role === 'MANAGER') {
+      return ['Рабочий стол', 'Сделки', 'Тест-драйв'].includes(section.title);
+    }
+    return true;
+  });
+
+  const menu = managerRoles.includes(role) && isManagerRoute ? filteredManagerMenu : userMenuList;
+
   return (
     <>
       <header
@@ -30,7 +51,7 @@ const MainHeader = () => {
           </h1>
           <nav>
             <ul className="flex gap-11">
-              {menu.map(item => (
+              {menu.map((item: MenuItem) => (
                 <li
                   key={item.title}
                   className={cn(
@@ -56,15 +77,3 @@ const MainHeader = () => {
 };
 
 export default MainHeader;
-
-const userMenuList = [
-  { title: 'Каталог автомобилей', path: '/' },
-  { title: 'Личный кабинет клиента', path: '/personal_office' },
-];
-
-const managerMenuList = [
-  { title: 'Рабочий стол', path: '/manager/dashboard' },
-  { title: 'Сделки', path: '/manager/deals' },
-  { title: 'Тест-драйв', path: '/manager/test_drives' },
-  { title: 'Отчеты', path: '/manager/reporting' },
-];

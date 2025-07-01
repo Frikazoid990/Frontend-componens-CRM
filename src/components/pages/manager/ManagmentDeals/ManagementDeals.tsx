@@ -1,4 +1,5 @@
 import { dealApiRoutes, statusApiRoutes } from '@/constants/routes';
+import { useSession } from '@/hooks/useSession';
 import { useToken } from '@/hooks/useToken';
 import type { DealType } from '@/types/deal/deal.type';
 import type { DealStatusType } from '@/types/statuses/deal.status.type';
@@ -15,7 +16,9 @@ export interface KanbanColumn {
 const ManagementDeals = () => {
   const [columns, setColumns] = useState<KanbanColumn[]>([]);
   const [statusesTable, setStatusesTable] = useState<Record<number, string> | null>(null);
-  const [dealsTable, setDealsTable] = useState<Record<string, DealType[]> | null>(null); // Assuming dealsTable is an array of Deal objects
+  const [dealsTable, setDealsTable] = useState<Record<string, DealType[]> | null>(null); //
+  const [searchTerm, setSearchTerm] = useState('');
+  //  Assuming dealsTable is an array of Deal objects
   const token = useToken();
   const fetchStatuses = async () => {
     try {
@@ -46,23 +49,6 @@ const ManagementDeals = () => {
         },
         {} as Record<number, string>,
       );
-      //TODO: Need to delete
-      // const columns: KanbanColumn[] = [
-      //   { id: 1, title: 'Менеджер не назван' },
-      //   { id: 2, title: 'Новое' }, // Adding an "All Deals" column
-      //   { id: 3, title: 'Консультация' },
-      //   { id: 4, title: 'Договор' },
-      //   { id: 5, title: 'Доставка' },
-      // ];
-      // //TODO: Need to delete
-      // const statusesMap = columns.reduce(
-      //   (acc, column) => {
-      //     acc[column.id] = column.title;
-      //     return acc;
-      //   },
-
-      //   {} as Record<number, string>,
-      // );
 
       setStatusesTable(statusesMap);
       setColumns(columns);
@@ -77,7 +63,6 @@ const ManagementDeals = () => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
-          // Add any other headers if needed, like authorization
         },
         credentials: 'include', // Include cookies for session management
       });
@@ -98,133 +83,6 @@ const ManagementDeals = () => {
         },
         {} as Record<string, DealType[]>,
       );
-
-      // //TODO: Need to delete
-      // const initialDealsTable: Record<string, DealType[]> = {
-      //   'Менеджер не назван': [
-      //     {
-      //       id: '231231',
-      //       createdAt: new Date(),
-      //       isCanceled: false,
-      //       price: 0,
-      //       status: 'Менеджер не назван',
-      //       selectedConfiguration: '',
-      //       selectedOptions: { engine: [], color: [] },
-      //       car: {
-      //         id: '12323', // Assuming a basic structure for Car
-      //         model: 'Model X',
-      //         brand: 'Brand Y',
-      //         imgPath: '/path/to/image.jpg',
-      //       }, // Assuming a basic structure for Car
-      //       client: { fullName: '', id: '1111', phoneNumber: '' }, // Assuming a basic structure for Client
-      //     },
-
-      //     {
-      //       id: '231232',
-      //       createdAt: new Date(),
-      //       isCanceled: false,
-      //       price: 0,
-      //       status: 'Менеджер не назван',
-      //       selectedConfiguration: '',
-      //       selectedOptions: { engine: [], color: [] },
-      //       car: {
-      //         id: '12324', // Assuming a basic structure for Car
-      //         model: 'Model Y',
-      //         brand: 'Brand Z',
-      //         imgPath: '/path/to/image2.jpg',
-      //       }, // Assuming a basic structure for Car
-      //       client: { fullName: '', id: '1112', phoneNumber: '' }, // Assuming a basic structure for Client
-      //     },
-
-      //     {
-      //       id: '231233',
-      //       createdAt: new Date(),
-      //       isCanceled: false,
-      //       price: 0,
-      //       status: 'Менеджер не назван',
-      //       selectedConfiguration: '',
-      //       selectedOptions: { engine: [], color: [] },
-      //       car: {
-      //         id: '12325', // Assuming a basic structure for Car
-      //         model: 'Model Z',
-      //         brand: 'Brand A',
-      //         imgPath: '/path/to/image3.jpg',
-      //       }, // Assuming a basic structure for Car
-      //       client: { fullName: '', id: '1113', phoneNumber: '' }, // Assuming a basic structure for Client
-      //     },
-      //   ],
-      //   Новое: [
-      //     {
-      //       id: '231234',
-      //       createdAt: new Date(),
-      //       isCanceled: false,
-      //       price: 0,
-      //       status: 'Новое',
-      //       selectedConfiguration: '',
-      //       selectedOptions: { engine: [], color: [] },
-      //       car: {
-      //         id: '12326', // Assuming a basic structure for Car
-      //         model: 'Model A',
-      //         brand: 'Brand B',
-      //         imgPath: '/path/to/image4.jpg',
-      //       }, // Assuming a basic structure for Car
-      //       client: { fullName: '', id: '1114', phoneNumber: '' }, // Assuming a basic structure for Client
-      //     },
-      //   ],
-      //   Консультация: [
-      //     {
-      //       id: '231235',
-      //       createdAt: new Date(),
-      //       isCanceled: false,
-      //       price: 0,
-      //       status: 'Консультация',
-      //       selectedConfiguration: '',
-      //       selectedOptions: { engine: [], color: [] },
-      //       car: {
-      //         id: '12327', // Assuming a basic structure for Car
-      //         model: 'Model B',
-      //         brand: 'Brand C',
-      //         imgPath: '/path/to/image5.jpg',
-      //       }, // Assuming a basic structure for Car
-      //       client: { fullName: '', id: '1115', phoneNumber: '' }, // Assuming a basic structure for Client
-      //     },
-      //   ],
-      //   Договор: [
-      //     {
-      //       id: '231236',
-      //       createdAt: new Date(),
-      //       isCanceled: false,
-      //       price: 0,
-      //       status: 'Договор',
-      //       selectedConfiguration: '',
-      //       selectedOptions: { engine: [], color: [] },
-      //       car: {
-      //         id: '12328', // Assuming a basic structure for Car
-      //         model: 'Model C',
-      //         brand: 'Brand D',
-      //         imgPath: '/path/to/image6.jpg',
-      //       }, // Assuming a basic structure for Car
-      //       client: { fullName: '', id: '1116', phoneNumber: '' }, // Assuming a basic structure for Client
-      //     },
-      //     {
-      //       id: '231237',
-      //       createdAt: new Date(),
-      //       isCanceled: false,
-      //       price: 0,
-      //       status: 'Договор',
-      //       selectedConfiguration: '',
-      //       selectedOptions: { engine: [], color: [] },
-      //       car: {
-      //         id: '12329', // Assuming a basic structure for Car
-      //         model: 'Model D',
-      //         brand: 'Brand E',
-      //         imgPath: '/path/to/image7.jpg',
-      //       }, // Assuming a basic structure for Car
-      //       client: { fullName: '', id: '1117', phoneNumber: '' }, // Assuming a basic structure for Client
-      //     },
-      //   ],
-      //   Доставка: [],
-      // };
 
       setDealsTable(initialDealsTable);
     } catch (error) {
@@ -318,20 +176,75 @@ const ManagementDeals = () => {
     // setColumns(newColumns);
   };
 
+  const filteredDealsTable = (): Record<string, DealType[]> => {
+    if (!searchTerm.trim() || !dealsTable) {
+      return dealsTable || {}; // Если нет поиска или данных — возвращаем оригинальные или пустой объект
+    }
+
+    const lowercasedTerm = searchTerm.toLowerCase();
+    const result: Record<string, DealType[]> = {};
+
+    Object.entries(dealsTable).forEach(([status, deals]) => {
+      result[status] = deals.filter(deal => {
+        const clientName = deal.client.fullName?.toLowerCase() || '';
+        const carModel = `${deal.car.brand} ${deal.car.model}`.toLowerCase();
+        const price = String(deal.price);
+        const phoneNumber = deal.client.phoneNumber.toLowerCase() || '';
+        return (
+          clientName.includes(lowercasedTerm) ||
+          carModel.includes(lowercasedTerm) ||
+          price.includes(lowercasedTerm) ||
+          phoneNumber.includes(lowercasedTerm)
+        );
+      });
+    });
+
+    return result;
+  };
+
+  const role = useSession()?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex w-full justify-center gap-4 overflow-x-auto p-4">
-        {columns.map((column, colIndex) => (
-          <DealColumn
-            key={column.id}
-            column={column}
-            colIndex={colIndex}
-            colLength={columns.length}
-            deals={dealsTable ? dealsTable[column.title] || [] : []}
+    <>
+      <div className="flex justify-end p-4">
+        <div className="w-64">
+          <input
+            type="text"
+            placeholder="Поиск..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
           />
-        ))}
+        </div>
       </div>
-    </DragDropContext>
+
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="flex w-full justify-center gap-4 overflow-x-auto p-4">
+          {columns
+            .filter(section => {
+              if (role === 'MANAGER') {
+                return [
+                  'Новая',
+                  'Консультация',
+                  'Подписание договора',
+                  'Доставка/Подготовка автомобиля',
+                  'Завершена',
+                ].includes(section.title);
+              } else {
+                return section;
+              }
+            })
+            .map((column, colIndex) => (
+              <DealColumn
+                key={column.id}
+                column={column}
+                colIndex={colIndex}
+                colLength={columns.length}
+                deals={filteredDealsTable()[column.title] || []}
+              />
+            ))}
+        </div>
+      </DragDropContext>
+    </>
   );
 };
 

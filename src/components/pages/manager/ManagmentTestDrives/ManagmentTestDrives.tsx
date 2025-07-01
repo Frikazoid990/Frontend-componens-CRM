@@ -1,9 +1,7 @@
 import { fetchTestDrivesForManager } from '@/actions/test_drive.action';
-import { Button } from '@/components/ui/button';
 import { useSession } from '@/hooks/useSession';
 import { useToken } from '@/hooks/useToken';
 import { TestDriveStatus, type TestDriveType } from '@/types/test-drive/test_drive.type';
-import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import ManagementTestDriveCard from './ui/ManagementTestDriveCard';
 
@@ -64,24 +62,32 @@ const ManagementTestDrives = () => {
     // Placeholder for create test drive functionality
     console.log('Create Test Drive clicked');
   };
-
+  const role = useSession()?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
   const testDrivesStatusSections: StatusSection[] = [
     { id: TestDriveStatus.NotAssigned, title: 'Менеджер не назначен' },
     { id: TestDriveStatus.InProgress, title: 'В процессе' },
-  ];
+  ].filter(section => {
+    if (role === 'MANAGER') {
+      return section.title === 'В процессе';
+    } else {
+      return section;
+    }
+  });
 
   return (
     <div className="mx-auto w-full max-w-[80%] space-y-6 p-6">
-      {/* Header with Create Button */}
+      {/* Header with Create Button
       <div className="flex justify-end">
-        <Button onClick={handleCreateTestDrive} className="flex items-center gap-2">
+        <Button disabled={true} onClick={handleCreateTestDrive} className="flex items-center gap-2">
           <Plus className="h-4 w-4" />
           Create Test Drive
         </Button>
-      </div>
+      </div> */}
 
       {/* Status Sections */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div
+        className={`grid grid-cols-1 gap-6 ${testDrivesStatusSections.length === 1 ? 'lg:grid-cols-1' : 'lg:grid-cols-2'}`}
+      >
         {testDrivesStatusSections.map(status => (
           <div key={status.id} className="rounded-lg border border-gray-300">
             {/* Section Header */}

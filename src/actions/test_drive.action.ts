@@ -38,7 +38,10 @@ export const fetchAvailableSlots = async (
   }
 };
 
-export const createTestDriveAction = async (request: Omit<TestDriveTypeOut, 'id' | 'createdAt'>): Promise<void> => {
+export const createTestDriveAction = async (
+  request: Omit<TestDriveTypeOut, 'id' | 'createdAt'>,
+  token: string | null,
+): Promise<void> => {
   try {
     const requestBody = JSON.stringify(request);
 
@@ -46,6 +49,7 @@ export const createTestDriveAction = async (request: Omit<TestDriveTypeOut, 'id'
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: requestBody,
       credentials: 'include',

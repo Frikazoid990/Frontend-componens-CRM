@@ -1,5 +1,5 @@
+import { ChatSection } from '@/components/items/Chat/chat-section';
 import { dealApiRoutes } from '@/constants/routes';
-import { ChatSection } from '@/gpt/deal-details-for-manager/chat-section';
 import { CarInfoCard } from '@/gpt/personal-ofice-deal-info-components/car-info-card';
 import { DealDetailsCard } from '@/gpt/personal-ofice-deal-info-components/deal-details-card';
 import { useSession } from '@/hooks/useSession';

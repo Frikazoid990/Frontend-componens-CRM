@@ -38,7 +38,7 @@ const AuthPage = () => {
   const [loginForm, setLoginForm] = useState<LoginFormType>(initialLoginForm);
   const [registerForm, setRegisterFrom] = useState<RegisterFormType>(initialRegisterForm);
   const [error, setError] = useState<string | null>(null); // <-- Состояние для ошибок
-
+  const user = useSession();
   const submitHandler = async () => {
     setError(null); // Сброс предыдущей ошибки
     if (activeTab === 'login') {
@@ -98,7 +98,6 @@ const AuthPage = () => {
         setError('Ошибка регистрации. Попробуйте позже.');
         return;
       }
-
       const createdUserId: UUID = await response.json();
       if (createdUserId) {
         if (user?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] == 'CLIENT') navigate({ to: '/' });
@@ -110,7 +109,6 @@ const AuthPage = () => {
     }
   };
 
-  const user = useSession();
   useEffect(() => {
     if (user) navigate({ to: '/' });
   }, []);

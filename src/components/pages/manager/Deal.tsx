@@ -1,11 +1,11 @@
 import { fetchUpdateEmployeeDeal } from '@/actions/deal.action';
 import { fetchStaff } from '@/actions/staff.action';
+import { ChatSection } from '@/components/items/Chat/chat-section';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { dealApiRoutes } from '@/constants/routes';
-import { ChatSection } from '@/gpt/deal-details-for-manager/chat-section';
 import { useSession } from '@/hooks/useSession';
 import { useToken } from '@/hooks/useToken';
 import type { Employee } from '@/types/Common types/employee.type';
@@ -295,11 +295,18 @@ const Deal = () => {
               <Card className="p-4">
                 <h4 className="mb-3 text-lg font-medium">{deal?.car.brand + ' ' + deal?.car.model}</h4>
                 <div className="mb-4 flex justify-center">
-                  <div className="bg-muted flex aspect-video w-full max-w-md items-center justify-center">
+                  {/* <div className="bg-muted flex aspect-video w-full max-w-md items-center justify-center">
                     <img
                       src={deal?.car.imgPath}
                       alt={`${deal?.car.brand} ${deal?.car.model}`}
                       className="h-full w-full object-cover"
+                    />
+                  </div> */}
+                  <div className="bg-muted relative h-80 w-full overflow-hidden rounded-md">
+                    <img
+                      src={deal?.car.imgPath}
+                      alt={`${deal?.car.brand} ${deal?.car.model}`}
+                      className="h-full w-full object-cover opacity-50 transition-opacity hover:opacity-100"
                     />
                   </div>
                 </div>

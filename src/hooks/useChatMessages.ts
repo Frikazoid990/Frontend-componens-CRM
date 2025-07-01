@@ -3,25 +3,28 @@ import * as signalR from '@microsoft/signalr';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSession } from './useSession';
 
-interface Message {
+export interface Message {
   id: string;
   content: string;
-  sender: string;
+  sendler: string;
   createdAt: string;
 }
 
-interface UseChatReturn {
+export interface UseChatReturn {
   messages: Message[];
-  sendMessage: (content: string) => Promise<void>;
+  sendMessage: () => Promise<void>;
   isConnected: boolean;
   error: string | null;
+  inputValue: string;
+  setInputValue: (newValue: string) => void;
 }
 
-export const useChat = (chatId: number | null): UseChatReturn => {
+export const useChat = (chatId: number | null, onSend?: () => void): UseChatReturn => {
   const connectionRef = useRef<signalR.HubConnection | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [inputValue, setInputValue] = useState<string>('');
   const session = useSession();
   const userId = session?.id;
 
@@ -91,25 +94,24 @@ export const useChat = (chatId: number | null): UseChatReturn => {
    * Send a message to the current chat room.
    * @param content - The text content of the message.
    */
-  const sendMessage = useCallback(
-    async (content: string) => {
-      if (!connectionRef.current || !isConnected) {
-        setError('Not connected to chat');
-        return;
-      }
-      if (chatId === null || !userId) {
-        setError('Invalid chat or user session');
-        return;
-      }
+  const sendMessage = useCallback(async () => {
+    if (!connectionRef.current || !isConnected) {
+      setError('Not connected to chat');
+      return;
+    }
+    if (chatId === null || !userId) {
+      setError('Invalid chat or user session');
+      return;
+    }
 
-      try {
-        await connectionRef.current.invoke('SendMessage', chatId, content, userId);
-      } catch {
-        setError('Failed to send message');
-      }
-    },
-    [chatId, isConnected, userId],
-  );
+    try {
+      await connectionRef.current.invoke('SendMessage', chatId, inputValue, userId);
+    } catch {
+      setError('Failed to send message');
+    }
 
-  return { messages, sendMessage, isConnected, error };
+    onSend?.();
+  }, [chatId, isConnected, inputValue, userId]);
+
+  return { messages, sendMessage, isConnected, error, inputValue, setInputValue };
 };

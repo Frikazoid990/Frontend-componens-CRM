@@ -265,36 +265,36 @@ const initialTestDrives: TestDriveType[] = [
   },
 ];
 
-const initialDeal: DealType = {
-  id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
-  createdAt: new Date('2023-05-15T10:00:00Z'),
-  isCancelled: false,
-  price: 45000,
-  status: 'Completed',
-  selectedConfiguration: 'Premium Package',
-  selectedOptions: {
-    engine: ['V6 3.0L'],
-    color: [
-      {
-        name: '',
-        hex: '',
-      },
-    ],
-  },
-  car: {
-    id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
-    model: 'Camry',
-    brand: 'Toyota',
-    imgPath: '/focusrs.jpg',
-  },
-  client: {
-    id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
-    fullName: 'John Smith',
-    phoneNumber: '+1234567890',
-  },
-  employee: {
-    id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
-    fullName: 'Alice Johnson',
-  },
-};
+// const initialDeal: DealType = {
+//   id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
+//   createdAt: new Date('2023-05-15T10:00:00Z'),
+//   isCancelled: false,
+//   price: 45000,
+//   status: 'Completed',
+//   selectedConfiguration: 'Premium Package',
+//   selectedOptions: {
+//     engine: ['V6 3.0L'],
+//     color: [
+//       {
+//         name: '',
+//         hex: '',
+//       },
+//     ],
+//   },
+//   car: {
+//     id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
+//     model: 'Camry',
+//     brand: 'Toyota',
+//     imgPath: '/focusrs.jpg',
+//   },
+//   client: {
+//     id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
+//     fullName: 'John Smith',
+//     phoneNumber: '+1234567890',
+//   },
+//   employee: {
+//     id: 'e07f18ad-2186-4294-bffc-80ddd8e57bb1',
+//     fullName: 'Alice Johnson',
+//   },
+// };
 export default PersonalOffice;

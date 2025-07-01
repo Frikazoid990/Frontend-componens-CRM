@@ -4,7 +4,8 @@ import { Input } from '@/components/ui/input';
 import { useChat } from '@/hooks/useChatMessages';
 import { useSession } from '@/hooks/useSession';
 import { Send } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import MessageItem from './ui/MessageItem';
 
 interface Message {
   id: number;
@@ -19,34 +20,36 @@ interface ChatProps {
 
 export function ChatSection({ chatId }: ChatProps) {
   const [innerChatId, setInnerChatId] = useState(chatId);
+  const lastMassageRef = useRef<HTMLDivElement | null>(null);
   const user = useSession();
 
   useEffect(() => {
     setInnerChatId(chatId);
   }, [chatId]);
 
-  const [inputValue, setInputValue] = useState('');
-  const { messages, isConnected, error, sendMessage } = useChat(innerChatId);
+  const { messages, isConnected, error, sendMessage, inputValue, setInputValue } = useChat(innerChatId);
 
-  // useChatMessages({ chatId, onMessageReceived: handleNewMessage });
+  useEffect(() => {
+    if (lastMassageRef.current !== null) {
+      lastMassageRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  }, [messages]);
+
   return (
     <Card className="flex h-full flex-col">
       <CardHeader>
         <CardTitle className="text-lg font-semibold">Чат</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col justify-between p-4">
-        <div className="mb-4 h-[400px] flex-1 overflow-y-auto rounded-md border p-4">
-          {messages.map(message => (
-            <div key={message.id} className={`mb-4 ${message.sender === 'Вы:' ? 'text-right' : 'text-left'}`}>
-              <div
-                className={`inline-block max-w-[80%] rounded-lg px-4 py-2 ${
-                  message.sender === 'Вы:' ? 'bg-blue-100 text-blue-900' : 'bg-gray-100 text-gray-900'
-                }`}
-              >
-                <p className="text-sm">{message.content}</p>
-              </div>
-              <p className="mt-1 text-xs text-gray-500">{new Date(message.createdAt).toLocaleTimeString()}</p>
-            </div>
+        <div className="mb-4 h-[400px] max-h-[580px] flex-1 overflow-y-auto rounded-md border p-4">
+          {messages.map((message, index) => (
+            <MessageItem
+              messagesLength={messages.length}
+              index={index}
+              message={message}
+              userFullName={user?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] ?? 'user'}
+              ref={lastMassageRef}
+            />
           ))}
         </div>
         <div className="mt-4 flex items-center space-x-2">
@@ -55,11 +58,17 @@ export function ChatSection({ chatId }: ChatProps) {
             className="flex-1"
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                sendMessage();
+                setInputValue('');
+              }
+            }}
           />
           <Button
             size="icon"
             onClick={() => {
-              sendMessage(inputValue);
+              sendMessage();
               setInputValue('');
             }}
           >

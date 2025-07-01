@@ -1,42 +1,42 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import { ChatSection } from "@/gpt/deal-details-for-manager/chat-section"
-import { AppSidebar } from "@/gpt/kanban-board-components/app-sidebar"
-import Honda from "@/img-car-page/HondaCivic.jpg"
-import { Edit, User } from "lucide-react"
-import { useState } from "react"
+import { ChatSection } from '@/components/items/Chat/chat-section';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/gpt/kanban-board-components/app-sidebar';
+import Honda from '@/img-car-page/HondaCivic.jpg';
+import { Edit, User } from 'lucide-react';
+import { useState } from 'react';
 
 export default function ManagerDealPage() {
-  const [isEditingPrice, setIsEditingPrice] = useState(false)
-  const [currentOffer, setCurrentOffer] = useState("3 000 000")
+  const [isEditingPrice, setIsEditingPrice] = useState(false);
+  const [currentOffer, setCurrentOffer] = useState('3 000 000');
 
   const handleEditPrice = () => {
-    setIsEditingPrice(true)
-  }
+    setIsEditingPrice(true);
+  };
 
   const handleSavePrice = () => {
-    setIsEditingPrice(false)
+    setIsEditingPrice(false);
     // Here you would typically save to backend
-  }
+  };
 
   const handleCancelEdit = () => {
-    setIsEditingPrice(false)
-    setCurrentOffer("1 800 000") // Reset to original value
-  }
+    setIsEditingPrice(false);
+    setCurrentOffer('1 800 000'); // Reset to original value
+  };
 
   const handleCancel = () => {
     // Handle deal cancellation
-    console.log("Deal cancelled")
-  }
+    console.log('Deal cancelled');
+  };
 
   const handleComplete = () => {
     // Handle deal completion
-    console.log("Deal completed")
-  }
+    console.log('Deal completed');
+  };
 
   return (
     <SidebarProvider>
@@ -71,11 +71,11 @@ export default function ManagerDealPage() {
                           <div className="flex items-center gap-2">
                             <Input
                               value={currentOffer}
-                              onChange={(e) => setCurrentOffer(e.target.value)}
+                              onChange={e => setCurrentOffer(e.target.value)}
                               className="w-32"
                               placeholder="Enter amount"
                             />
-                            <span className="text-sm text-muted-foreground">(RUB)</span>
+                            <span className="text-muted-foreground text-sm">(RUB)</span>
                             <Button size="sm" onClick={handleSavePrice}>
                               Save
                             </Button>
@@ -90,9 +90,9 @@ export default function ManagerDealPage() {
                               size="sm"
                               variant="outline"
                               onClick={handleEditPrice}
-                              className="h-6 px-2 text-xs hover:bg-accent hover:text-accent-foreground transition-colors"
+                              className="hover:bg-accent hover:text-accent-foreground h-6 px-2 text-xs transition-colors"
                             >
-                              <Edit className="h-3 w-3 mr-1" />
+                              <Edit className="mr-1 h-3 w-3" />
                               Редактировать
                             </Button>
                           </div>
@@ -117,7 +117,7 @@ export default function ManagerDealPage() {
                         <Button
                           size="sm"
                           onClick={handleComplete}
-                          className="bg-green-600 hover:bg-green-700 text-white transition-colors"
+                          className="bg-green-600 text-white transition-colors hover:bg-green-700"
                         >
                           Завершить
                         </Button>
@@ -131,12 +131,8 @@ export default function ManagerDealPage() {
                     <Card className="p-4">
                       <h4 className="mb-3 text-lg font-medium">Honda Civic</h4>
                       <div className="mb-4 flex justify-center">
-                        <div className="aspect-video w-full max-w-md bg-muted flex items-center justify-center">
-                          <img 
-                            src= {Honda}
-                            alt="Honda Civic" 
-                            className="object-cover w-full h-full"
-                          />
+                        <div className="bg-muted flex aspect-video w-full max-w-md items-center justify-center">
+                          <img src={Honda} alt="Honda Civic" className="h-full w-full object-cover" />
                         </div>
                       </div>
                       <div className="grid grid-cols-4 gap-2 text-center text-sm">
@@ -156,7 +152,6 @@ export default function ManagerDealPage() {
                           <p className="font-medium">Текущая цена:</p>
                           <div className="flex items-center justify-center gap-2">
                             <p>1 800 000 (RUB)</p>
-
                           </div>
                         </div>
                       </div>
@@ -176,5 +171,5 @@ export default function ManagerDealPage() {
         </SidebarInset>
       </div>
     </SidebarProvider>
-  )
+  );
 }
